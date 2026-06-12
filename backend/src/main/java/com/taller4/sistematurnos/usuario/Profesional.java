@@ -5,7 +5,9 @@ import lombok.Data;
 
 @Entity
 @Table(name = "profesionales")
+@PrimaryKeyJoinColumn(name = "usuario_id")
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Profesional {
 
 	@Id
