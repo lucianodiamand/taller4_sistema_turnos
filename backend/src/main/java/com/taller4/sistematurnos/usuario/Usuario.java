@@ -1,4 +1,4 @@
-package com.example.sistematurnos.entities;
+package com.taller4.sistematurnos.usuario;
 
 import javax.persistence.*;
 import lombok.Data;
