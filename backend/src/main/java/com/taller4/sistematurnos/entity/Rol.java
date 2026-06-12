@@ -1,4 +1,4 @@
-package com.taller4.sistematurnos.usuario;
+package com.taller4.sistematurnos.entity;
 
 /**
  * Rol de un Usuario. Define qué puede hacer cada cuenta:

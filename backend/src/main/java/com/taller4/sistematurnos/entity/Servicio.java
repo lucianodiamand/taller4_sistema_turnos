@@ -1,6 +1,6 @@
-package com.taller4.sistematurnos.usuario;
+package com.taller4.sistematurnos.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 import lombok.Data;
 

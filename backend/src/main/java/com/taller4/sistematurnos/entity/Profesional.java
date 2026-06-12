@@ -1,13 +1,11 @@
-package com.taller4.sistematurnos.usuario;
+package com.taller4.sistematurnos.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "profesionales")
-@PrimaryKeyJoinColumn(name = "usuario_id")
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class Profesional {
 
 	@Id

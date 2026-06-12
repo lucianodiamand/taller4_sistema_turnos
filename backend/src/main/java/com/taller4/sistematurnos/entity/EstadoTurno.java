@@ -1,4 +1,4 @@
-package com.taller4.sistematurnos.turno;
+package com.taller4.sistematurnos.entity;
 
 /**
  * Estado de un Turno a lo largo de su ciclo de vida:

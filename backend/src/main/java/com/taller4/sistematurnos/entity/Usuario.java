@@ -1,11 +1,10 @@
-package com.taller4.sistematurnos.usuario;
+package com.taller4.sistematurnos.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "usuarios")
-@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 public class Usuario {
 
@@ -19,12 +18,12 @@ public class Usuario {
 	@Column(nullable = false, unique = true, length = 100)
 	private String email;
 
-	@Column(name = "contrascena_hash", nullable = false, length = 255)
-	private String contraseñaHash;
+	@Column(name = "password_hash", nullable = false, length = 255)
+	private String passwordHash;
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
-	private ERole rol;
+	private Rol rol;
 
 	@Column(nullable = false)
 	private boolean activo = true;

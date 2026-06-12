@@ -1,4 +1,4 @@
-package com.taller4.sistematurnos.health;
+package com.taller4.sistematurnos.dto;
 
 import java.time.Instant;
 
