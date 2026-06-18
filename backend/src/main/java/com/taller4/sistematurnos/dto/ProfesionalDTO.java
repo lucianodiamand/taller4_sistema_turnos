@@ -1,30 +1,14 @@
 package com.taller4.sistematurnos.dto;
 
-import lombok.Data;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-@Data
-public class ProfesionalDTO {
-
-	private Long id;
-	
-	@NotBlank
-	private String nombre;
-	
-	@NotBlank
-	@Email
-	private String email;
-	
-	@NotBlank
-	private String rol; 
-	
-	private boolean activo;
-
-	@NotBlank
-	private String especialidad;
-	
-	private String bio;
-	private String telefono;
-
+public record ProfesionalDTO(
+    Long id,
+    @NotNull @Valid UsuarioDTO usuario,
+    @NotBlank @Size(max = 100) String especialidad,
+    String bio,
+    @Size(max = 20) String telefono) {
 }

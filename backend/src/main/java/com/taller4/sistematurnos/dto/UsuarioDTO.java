@@ -1,24 +1,14 @@
 package com.taller4.sistematurnos.dto;
 
-import lombok.Data;
+import com.taller4.sistematurnos.entity.Rol;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-@Data
-public class UsuarioDTO {
-
-	private Long id;
-	
-	@NotBlank
-	private String nombre;
-	
-	@NotBlank
-	@Email
-	private String email;
-	
-	@NotBlank
-	private String rol; 
-	
-	private boolean activo;
-
-}
+public record UsuarioDTO(
+    Long id,
+    @NotBlank @Size(max = 100) String nombre,
+    @NotBlank @Email @Size(max = 100) String email,
+    @NotNull Rol rol,
+    boolean activo) {}
