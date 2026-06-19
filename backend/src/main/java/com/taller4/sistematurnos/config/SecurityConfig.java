@@ -12,10 +12,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
- * Por ahora todo está permitido (permitAll) para que el endpoint /api/health,
- * el Swagger UI y la
- * consola H2 funcionen sin login. En el ciclo de autenticación se reemplazará
- * por una cadena con
+ * Por ahora todo está permitido (permitAll) para que el endpoint /api/health, el Swagger UI y la
+ * consola H2 funcionen sin login. En el ciclo de autenticación se reemplazará por una cadena con
  * filtro JWT, roles (ADMIN / PROFESIONAL / CLIENTE) y endpoints protegidos.
  */
 @Configuration
@@ -33,10 +31,8 @@ public class SecurityConfig {
   }
 
   /**
-   * Permite las llamadas del dev server de Angular (localhost:4200) En desarrollo
-   * usamos el proxy
-   * de Angular hacia /api, pero dejar CORS configurado evita sorpresas al llamar
-   * al backend
+   * Permite las llamadas del dev server de Angular (localhost:4200) En desarrollo usamos el proxy
+   * de Angular hacia /api, pero dejar CORS configurado evita sorpresas al llamar al backend
    * directamente
    */
   @Bean
