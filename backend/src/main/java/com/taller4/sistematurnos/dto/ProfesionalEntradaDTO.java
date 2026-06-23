@@ -10,5 +10,4 @@ public record ProfesionalEntradaDTO(
     @NotNull @Valid UsuarioEntradaDTO usuario,
     @NotBlank @Size(max = 100) String especialidad,
     String bio,
-    @Size(max = 20) String telefono) {
-}
+    @Size(max = 20) String telefono) {}

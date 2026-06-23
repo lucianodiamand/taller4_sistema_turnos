@@ -8,5 +8,4 @@ public record DisponibilidadSalidaDTO(
     ProfesionalSalidaDTO profesional,
     DiaSemana diaSemana,
     LocalTime horaInicio,
-    LocalTime horaFin) {
-}
+    LocalTime horaFin) {}
