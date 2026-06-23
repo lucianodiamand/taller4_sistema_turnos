@@ -11,5 +11,4 @@ public record TurnoSalidaDTO(
     UsuarioSalidaDTO cliente,
     LocalDateTime fechaHora,
     EstadoTurno estado,
-    Instant creadoEn) {
-}
+    Instant creadoEn) {}

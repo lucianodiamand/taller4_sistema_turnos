@@ -11,5 +11,4 @@ public record ServicioEntradaDTO(
     @NotBlank @Size(max = 100) String nombre,
     @NotBlank String descripcion,
     @NotNull @Positive Integer duracionMin,
-    @NotNull @Positive BigDecimal precio) {
-}
+    @NotNull @Positive BigDecimal precio) {}

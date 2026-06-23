@@ -8,5 +8,4 @@ public record DisponibilidadEntradaDTO(
     @NotNull Long profesionalId,
     @NotNull DiaSemana diaSemana,
     @NotNull LocalTime horaInicio,
-    @NotNull LocalTime horaFin) {
-}
+    @NotNull LocalTime horaFin) {}

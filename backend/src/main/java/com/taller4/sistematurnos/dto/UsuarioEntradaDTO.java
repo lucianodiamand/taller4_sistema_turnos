@@ -11,5 +11,4 @@ public record UsuarioEntradaDTO(
     @NotBlank @Size(max = 100) String nombre,
     @NotBlank @Email @Size(max = 100) String email,
     @NotNull Rol rol,
-    boolean activo) {
-}
+    boolean activo) {}
