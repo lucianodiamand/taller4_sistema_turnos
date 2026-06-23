@@ -46,8 +46,7 @@ cd backend
 
 - API: http://localhost:8080/api/health
 - Swagger UI: http://localhost:8080/swagger-ui.html
-- Consola H2: http://localhost:8080/h2-console
-  (JDBC URL: `jdbc:h2:file:./data/sistematurnos`, usuario `sa`, sin contraseña)
+- Consola H2: http://localhost:8080/h2-console (ver [Base de datos (H2)](#base-de-datos-h2))
 
 ### 2. Frontend
 
@@ -60,6 +59,43 @@ npm start
 App en http://localhost:4200 — muestra el estado del backend. El dev server proxya
 `/api` hacia el backend (ver `frontend/proxy.conf.json`), así que no hay problemas
 de CORS en desarrollo.
+
+## Base de datos (H2)
+
+La base es **H2 en archivo**: vive en `backend/data/sistematurnos.mv.db` y persiste
+entre reinicios. Las tablas las crea Hibernate solo al levantar el backend
+(`ddl-auto: update`), así que **no hace falta ningún script de schema**. Por ahora
+arranca vacía (sin datos semilla).
+
+### Inspeccionarla con la consola H2
+
+1. Levantá el backend (`./gradlew bootRun`).
+2. Abrí http://localhost:8080/h2-console.
+3. Completá el formulario de login con **estos** valores (el default que trae,
+   `jdbc:h2:mem:testdb`, es otra base en memoria — hay que reemplazarlo):
+
+   | Campo        | Valor                                              |
+   | ------------ | -------------------------------------------------- |
+   | Driver Class | `org.h2.Driver`                                    |
+   | JDBC URL     | `jdbc:h2:file:./data/sistematurnos;AUTO_SERVER=TRUE` |
+   | User Name    | `sa`                                               |
+   | Password     | *(vacío)*                                          |
+
+4. **Connect**.
+
+> **`AUTO_SERVER=TRUE` es lo que permite conectarse mientras el backend está
+> corriendo** (varias conexiones sobre el mismo archivo). Sin eso, H2 toma un lock
+> exclusivo y la consola falla con *"Database may be already in use"*. Es el mismo
+> motivo por el que el `spring.datasource.url` del backend ya lo incluye.
+
+### Para empezar de cero
+
+Apagá el backend y borrá los archivos de la base; se regeneran vacíos al próximo
+arranque:
+
+```bash
+rm backend/data/sistematurnos.mv.db backend/data/sistematurnos.lock.db
+```
 
 ## Tipos compartidos backend ↔ frontend
 
