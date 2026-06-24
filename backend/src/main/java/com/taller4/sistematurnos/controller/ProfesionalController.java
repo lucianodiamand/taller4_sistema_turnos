@@ -6,6 +6,7 @@ import com.taller4.sistematurnos.service.ProfesionalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +43,13 @@ public class ProfesionalController {
   @Operation(summary = "Listar todos los profesionales")
   public List<ProfesionalSalidaDTO> listar() {
     return service.listar();
+  }
+
+  @GetMapping("/me")
+  @PreAuthorize("hasRole('PROFESIONAL')")
+  @Operation(summary = "Obtener el profesional del usuario autenticado")
+  public ProfesionalSalidaDTO obtenerMio(Principal principal) {
+    return service.obtenerPorEmail(principal.getName());
   }
 
   @GetMapping("/{id}")

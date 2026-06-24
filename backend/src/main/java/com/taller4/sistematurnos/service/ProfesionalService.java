@@ -37,6 +37,15 @@ public class ProfesionalService {
     return ProfesionalMapper.toDto(buscar(id));
   }
 
+  /** Resuelve el profesional del usuario autenticado a partir de su email (endpoint /me). */
+  @Transactional(readOnly = true)
+  public ProfesionalSalidaDTO obtenerPorEmail(String email) {
+    return ProfesionalMapper.toDto(
+        profesionalRepository
+            .findByUsuarioEmail(email)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Profesional", email)));
+  }
+
   public ProfesionalSalidaDTO crear(ProfesionalEntradaDTO dto) {
     Profesional profesional = ProfesionalMapper.toEntity(dto);
     Usuario usuario = profesional.getUsuario();

@@ -54,8 +54,8 @@ public class TurnoController {
   }
 
   @PatchMapping("/{id}/estado")
-  @PreAuthorize("hasAnyRole('PROFESIONAL', 'ADMIN')")
-  @Operation(summary = "Cambiar el estado de un turno")
+  @PreAuthorize("hasAnyRole('CLIENTE', 'PROFESIONAL', 'ADMIN')")
+  @Operation(summary = "Cambiar el estado de un turno (el cliente lo usa para cancelar)")
   public TurnoSalidaDTO cambiarEstado(
       @PathVariable Long id, @Valid @RequestBody CambioEstadoTurnoDTO dto) {
     return service.cambiarEstado(id, dto.estado());
