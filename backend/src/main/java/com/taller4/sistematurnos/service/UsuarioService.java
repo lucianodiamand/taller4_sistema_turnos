@@ -1,5 +1,6 @@
 package com.taller4.sistematurnos.service;
 
+import com.taller4.sistematurnos.dto.PerfilUsuarioDTO;
 import com.taller4.sistematurnos.dto.UsuarioEntradaDTO;
 import com.taller4.sistematurnos.dto.UsuarioSalidaDTO;
 import com.taller4.sistematurnos.entity.Usuario;
@@ -41,6 +42,16 @@ public class UsuarioService {
     usuario.setRol(dto.rol());
     usuario.setActivo(dto.activo());
     return UsuarioMapper.toDto(usuarioRepository.save(usuario));
+  }
+
+  /** Autoedición: el usuario autenticado cambia su propio nombre (resuelto por su email). */
+  public UsuarioSalidaDTO actualizarPerfil(String email, PerfilUsuarioDTO dto) {
+    Usuario usuario =
+        usuarioRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", email));
+    usuario.setNombre(dto.nombre());
+    return UsuarioMapper.toDto(usuario);
   }
 
   /** Baja lógica: desactiva la cuenta (no se borra la fila). */

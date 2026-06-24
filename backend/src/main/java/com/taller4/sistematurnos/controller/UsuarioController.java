@@ -1,11 +1,13 @@
 package com.taller4.sistematurnos.controller;
 
+import com.taller4.sistematurnos.dto.PerfilUsuarioDTO;
 import com.taller4.sistematurnos.dto.UsuarioEntradaDTO;
 import com.taller4.sistematurnos.dto.UsuarioSalidaDTO;
 import com.taller4.sistematurnos.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +46,14 @@ public class UsuarioController {
   @Operation(summary = "Obtener un usuario por id")
   public UsuarioSalidaDTO obtener(@PathVariable Long id) {
     return service.obtener(id);
+  }
+
+  @PutMapping("/me")
+  @PreAuthorize("isAuthenticated()")
+  @Operation(summary = "Editar el perfil propio (nombre) del usuario autenticado")
+  public UsuarioSalidaDTO actualizarPerfil(
+      @Valid @RequestBody PerfilUsuarioDTO dto, Principal principal) {
+    return service.actualizarPerfil(principal.getName(), dto);
   }
 
   @PutMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.taller4.sistematurnos.controller;
 
+import com.taller4.sistematurnos.dto.PerfilProfesionalDTO;
 import com.taller4.sistematurnos.dto.ProfesionalEntradaDTO;
 import com.taller4.sistematurnos.dto.ProfesionalSalidaDTO;
 import com.taller4.sistematurnos.service.ProfesionalService;
@@ -50,6 +51,14 @@ public class ProfesionalController {
   @Operation(summary = "Obtener el profesional del usuario autenticado")
   public ProfesionalSalidaDTO obtenerMio(Principal principal) {
     return service.obtenerPorEmail(principal.getName());
+  }
+
+  @PutMapping("/me")
+  @PreAuthorize("hasRole('PROFESIONAL')")
+  @Operation(summary = "Editar el perfil profesional propio (especialidad/bio/teléfono)")
+  public ProfesionalSalidaDTO actualizarMiPerfil(
+      @Valid @RequestBody PerfilProfesionalDTO dto, Principal principal) {
+    return service.actualizarMiPerfil(principal.getName(), dto);
   }
 
   @GetMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.taller4.sistematurnos.service;
 
+import com.taller4.sistematurnos.dto.PerfilProfesionalDTO;
 import com.taller4.sistematurnos.dto.ProfesionalEntradaDTO;
 import com.taller4.sistematurnos.dto.ProfesionalSalidaDTO;
 import com.taller4.sistematurnos.entity.Profesional;
@@ -52,6 +53,18 @@ public class ProfesionalService {
     usuario.setPasswordHash(passwordEncoder.encode(dto.password()));
     usuario.setRol(Rol.PROFESIONAL);
     return ProfesionalMapper.toDto(profesionalRepository.save(profesional));
+  }
+
+  /** Autoedición: el profesional autenticado edita sus campos propios (resuelto por su email). */
+  public ProfesionalSalidaDTO actualizarMiPerfil(String email, PerfilProfesionalDTO dto) {
+    Profesional profesional =
+        profesionalRepository
+            .findByUsuarioEmail(email)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Profesional", email));
+    profesional.setEspecialidad(dto.especialidad());
+    profesional.setBio(dto.bio());
+    profesional.setTelefono(dto.telefono());
+    return ProfesionalMapper.toDto(profesional);
   }
 
   public ProfesionalSalidaDTO actualizar(Long id, ProfesionalEntradaDTO dto) {
