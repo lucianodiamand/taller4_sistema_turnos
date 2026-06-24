@@ -48,6 +48,16 @@ cd backend
 - Swagger UI: http://localhost:8080/swagger-ui.html
 - Consola H2: http://localhost:8080/h2-console (ver [Base de datos (H2)](#base-de-datos-h2))
 
+> **Secret de JWT.** La firma de los tokens usa `app.jwt.secret`, que se lee de la
+> variable de entorno **`APP_JWT_SECRET`** y, si no está, cae a un default de
+> desarrollo definido en `application.yml`. Para desarrollo no hace falta tocar nada.
+> En producción, definila (mín. 32 caracteres) antes de arrancar:
+>
+> ```bash
+> export APP_JWT_SECRET="una-cadena-larga-y-aleatoria-de-al-menos-32-caracteres"
+> ./gradlew bootRun
+> ```
+
 ### 2. Frontend
 
 ```bash

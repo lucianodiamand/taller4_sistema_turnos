@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class DisponibilidadController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @PreAuthorize("hasAnyRole('PROFESIONAL', 'ADMIN')")
   @Operation(summary = "Crear una disponibilidad")
   public DisponibilidadSalidaDTO crear(@Valid @RequestBody DisponibilidadEntradaDTO dto) {
     return service.crear(dto);
@@ -50,6 +52,7 @@ public class DisponibilidadController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasAnyRole('PROFESIONAL', 'ADMIN')")
   @Operation(summary = "Actualizar una disponibilidad")
   public DisponibilidadSalidaDTO actualizar(
       @PathVariable Long id, @Valid @RequestBody DisponibilidadEntradaDTO dto) {
@@ -58,6 +61,7 @@ public class DisponibilidadController {
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAnyRole('PROFESIONAL', 'ADMIN')")
   @Operation(summary = "Eliminar una disponibilidad")
   public void eliminar(@PathVariable Long id) {
     service.eliminar(id);
