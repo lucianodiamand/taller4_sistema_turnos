@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class TurnoController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @PreAuthorize("hasAnyRole('CLIENTE', 'ADMIN')")
   @Operation(summary = "Crear un turno (estado inicial PENDIENTE)")
   public TurnoSalidaDTO crear(@Valid @RequestBody TurnoEntradaDTO dto) {
     return service.crear(dto);
@@ -52,6 +54,7 @@ public class TurnoController {
   }
 
   @PatchMapping("/{id}/estado")
+  @PreAuthorize("hasAnyRole('PROFESIONAL', 'ADMIN')")
   @Operation(summary = "Cambiar el estado de un turno")
   public TurnoSalidaDTO cambiarEstado(
       @PathVariable Long id, @Valid @RequestBody CambioEstadoTurnoDTO dto) {

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class ServicioController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @PreAuthorize("hasRole('ADMIN')")
   @Operation(summary = "Crear un servicio")
   public ServicioSalidaDTO crear(@Valid @RequestBody ServicioEntradaDTO dto) {
     return service.crear(dto);
@@ -49,6 +51,7 @@ public class ServicioController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   @Operation(summary = "Actualizar un servicio")
   public ServicioSalidaDTO actualizar(
       @PathVariable Long id, @Valid @RequestBody ServicioEntradaDTO dto) {
@@ -57,6 +60,7 @@ public class ServicioController {
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('ADMIN')")
   @Operation(summary = "Eliminar un servicio")
   public void eliminar(@PathVariable Long id) {
     service.eliminar(id);

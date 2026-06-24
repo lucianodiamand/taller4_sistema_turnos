@@ -8,32 +8,30 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * ABM de usuarios (solo ADMIN). El alta de clientes va por /api/auth/register; la de profesionales
+ * por /api/profesionales. Acá no hay POST.
+ */
 @RestController
 @RequestMapping("/api/usuarios")
 @Tag(name = "Usuario", description = "Gestión de usuarios y clientes del sistema")
+@PreAuthorize("hasRole('ADMIN')")
 public class UsuarioController {
 
   private final UsuarioService service;
 
   public UsuarioController(UsuarioService service) {
     this.service = service;
-  }
-
-  @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  @Operation(summary = "Crear un usuario")
-  public UsuarioSalidaDTO crear(@Valid @RequestBody UsuarioEntradaDTO dto) {
-    return service.crear(dto);
   }
 
   @GetMapping
@@ -57,7 +55,7 @@ public class UsuarioController {
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(summary = "Eliminar un usuario")
+  @Operation(summary = "Eliminar (baja lógica) un usuario")
   public void eliminar(@PathVariable Long id) {
     service.eliminar(id);
   }

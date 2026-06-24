@@ -7,7 +7,6 @@ import com.taller4.sistematurnos.exception.RecursoNoEncontradoException;
 import com.taller4.sistematurnos.mapper.ServicioMapper;
 import com.taller4.sistematurnos.repository.ServicioRepository;
 import java.util.List;
-import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +33,7 @@ public class ServicioService {
 
   public ServicioSalidaDTO crear(ServicioEntradaDTO dto) {
     Servicio servicio = ServicioMapper.toEntity(dto);
-    Servicio servicioGuardado = Objects.requireNonNull(servicioRepository.save(servicio));
-    return ServicioMapper.toDto(servicioGuardado);
+    return ServicioMapper.toDto(servicioRepository.save(servicio));
   }
 
   public ServicioSalidaDTO actualizar(Long id, ServicioEntradaDTO dto) {
@@ -44,9 +42,7 @@ public class ServicioService {
     servicio.setDescripcion(dto.descripcion());
     servicio.setDuracionMin(dto.duracionMin());
     servicio.setPrecio(dto.precio());
-
-    Servicio servicioActualizado = Objects.requireNonNull(servicioRepository.save(servicio));
-    return ServicioMapper.toDto(servicioActualizado);
+    return ServicioMapper.toDto(servicioRepository.save(servicio));
   }
 
   public void eliminar(Long id) {
@@ -54,11 +50,8 @@ public class ServicioService {
   }
 
   private Servicio buscar(Long id) {
-    Long idBuscar = Objects.requireNonNull(id, "El id no puede ser nulo");
-    Servicio servicio =
-        servicioRepository
-            .findById(idBuscar)
-            .orElseThrow(() -> new RecursoNoEncontradoException("Servicio", idBuscar));
-    return Objects.requireNonNull(servicio);
+    return servicioRepository
+        .findById(id)
+        .orElseThrow(() -> new RecursoNoEncontradoException("Servicio", id));
   }
 }

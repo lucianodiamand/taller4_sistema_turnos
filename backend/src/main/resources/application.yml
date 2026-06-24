@@ -25,6 +25,11 @@ spring:
 server:
   port: 8080
 
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET:cambiar-este-secret-de-desarrollo-por-uno-largo-y-seguro-1234567890}
+    expiration-ms: 86400000 # 24 h
+
 springdoc:
   api-docs:
     path: /v3/api-docs
