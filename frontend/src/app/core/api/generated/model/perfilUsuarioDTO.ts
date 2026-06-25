@@ -5,7 +5,10 @@
  * OpenAPI spec version: v1
  */
 
-export interface HealthStatus {
-  status?: string;
-  timestamp?: string;
+export interface PerfilUsuarioDTO {
+  /**
+     * @minLength 0
+     * @maxLength 100
+     */
+  nombre?: string;
 }

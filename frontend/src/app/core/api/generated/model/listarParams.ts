@@ -5,7 +5,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface HealthStatus {
-  status?: string;
-  timestamp?: string;
-}
+export type ListarParams = {
+clienteId?: number;
+profesionalId?: number;
+};

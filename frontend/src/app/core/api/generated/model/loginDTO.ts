@@ -5,7 +5,9 @@
  * OpenAPI spec version: v1
  */
 
-export interface HealthStatus {
-  status?: string;
-  timestamp?: string;
+export interface LoginDTO {
+  /** @minLength 1 */
+  email?: string;
+  /** @minLength 1 */
+  password?: string;
 }
