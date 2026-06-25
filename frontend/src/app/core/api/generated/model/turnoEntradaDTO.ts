@@ -5,7 +5,9 @@
  * OpenAPI spec version: v1
  */
 
-export interface HealthStatus {
-  status?: string;
-  timestamp?: string;
+export interface TurnoEntradaDTO {
+  servicioId: number;
+  profesionalId: number;
+  clienteId: number;
+  fechaHora: string;
 }
