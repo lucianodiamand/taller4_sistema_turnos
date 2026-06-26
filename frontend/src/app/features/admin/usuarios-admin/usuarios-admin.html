@@ -1,0 +1,29 @@
+<section class="admin-module">
+  <div class="module-header">
+    <div>
+      <h2>Usuarios</h2>
+      <p>Listado, edición y baja lógica de usuarios del sistema.</p>
+    </div>
+  </div>
+
+  <app-admin-entity-form
+    *ngIf="showForm"
+    title="Editar usuario"
+    submitLabel="Guardar"
+    [model]="formModel"
+    [fields]="fields"
+    (submitForm)="onSubmit($event)"
+    (cancelForm)="showForm = false"
+  ></app-admin-entity-form>
+
+  <div class="table-wrapper">
+    <p *ngIf="isLoading">Cargando...</p>
+    <app-admin-data-table
+      [items]="items"
+      [columns]="columns"
+      emptyMessage="No hay usuarios cargados."
+      (edit)="openEdit($event)"
+      (remove)="onRemove($event)"
+    ></app-admin-data-table>
+  </div>
+</section>

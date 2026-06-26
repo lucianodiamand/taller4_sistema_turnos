@@ -12,6 +12,10 @@ import { authGuard, guestGuard, inicioRedirectGuard, roleGuard } from './core/au
  * - **                  cae a /inicio (que reenvía o manda a /login)
  */
 const placeholder = () => import('./features/placeholder/placeholder').then((m) => m.Placeholder);
+const adminHome = () => import('./features/admin/admin-home/admin-home').then((m) => m.AdminHomeComponent);
+const serviciosAdmin = () => import('./features/admin/servicios-admin/servicios-admin').then((m) => m.ServiciosAdminComponent);
+const profesionalesAdmin = () => import('./features/admin/profesionales-admin/profesionales-admin').then((m) => m.ProfesionalesAdminComponent);
+const usuariosAdmin = () => import('./features/admin/usuarios-admin/usuarios-admin').then((m) => m.UsuariosAdminComponent);
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'inicio' },
@@ -29,10 +33,10 @@ export const routes: Routes = [
         path: 'admin',
         canActivate: [roleGuard('ADMIN')],
         children: [
-          { path: '', loadComponent: placeholder },
-          { path: 'servicios', loadComponent: placeholder },
-          { path: 'usuarios', loadComponent: placeholder },
-          { path: 'profesionales', loadComponent: placeholder },
+          { path: '', loadComponent: adminHome },
+          { path: 'servicios', loadComponent: serviciosAdmin },
+          { path: 'usuarios', loadComponent: usuariosAdmin },
+          { path: 'profesionales', loadComponent: profesionalesAdmin },
         ],
       },
       {
