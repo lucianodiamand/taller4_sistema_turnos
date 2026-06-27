@@ -74,8 +74,22 @@ de CORS en desarrollo.
 
 La base es **H2 en archivo**: vive en `backend/data/sistematurnos.mv.db` y persiste
 entre reinicios. Las tablas las crea Hibernate solo al levantar el backend
-(`ddl-auto: update`), así que **no hace falta ningún script de schema**. Por ahora
-arranca vacía (sin datos semilla).
+(`ddl-auto: update`), así que **no hace falta ningún script de schema**.
+
+### Datos de prueba (seed)
+
+Al iniciar, el backend crea automáticamente **un usuario por rol** para probar
+rápido (idempotente: solo crea lo que falta). El email y la password coinciden con
+el rol:
+
+| Rol         | Email / usuario | Password      |
+| ----------- | --------------- | ------------- |
+| ADMIN       | `admin`         | `admin`       |
+| PROFESIONAL | `profesional`   | `profesional` |
+| CLIENTE     | `cliente`       | `cliente`     |
+
+El usuario `profesional` ya viene con su registro `Profesional` asociado. La lógica
+está en `config/DataSeeder`.
 
 ### Inspeccionarla con la consola H2
 

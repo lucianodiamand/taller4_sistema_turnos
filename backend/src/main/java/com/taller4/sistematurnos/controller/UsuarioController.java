@@ -37,27 +37,29 @@ public class UsuarioController {
   }
 
   @GetMapping
-  @Operation(summary = "Listar todos los usuarios")
+  @Operation(operationId = "listarUsuarios", summary = "Listar todos los usuarios")
   public List<UsuarioSalidaDTO> listar() {
     return service.listar();
   }
 
   @GetMapping("/{id}")
-  @Operation(summary = "Obtener un usuario por id")
+  @Operation(operationId = "obtenerUsuario", summary = "Obtener un usuario por id")
   public UsuarioSalidaDTO obtener(@PathVariable Long id) {
     return service.obtener(id);
   }
 
   @PutMapping("/me")
   @PreAuthorize("isAuthenticated()")
-  @Operation(summary = "Editar el perfil propio (nombre) del usuario autenticado")
+  @Operation(
+      operationId = "actualizarMiPerfil",
+      summary = "Editar el perfil propio (nombre) del usuario autenticado")
   public UsuarioSalidaDTO actualizarPerfil(
       @Valid @RequestBody PerfilUsuarioDTO dto, Principal principal) {
     return service.actualizarPerfil(principal.getName(), dto);
   }
 
   @PutMapping("/{id}")
-  @Operation(summary = "Actualizar un usuario")
+  @Operation(operationId = "actualizarUsuario", summary = "Actualizar un usuario")
   public UsuarioSalidaDTO actualizar(
       @PathVariable Long id, @Valid @RequestBody UsuarioEntradaDTO dto) {
     return service.actualizar(id, dto);
@@ -65,7 +67,7 @@ public class UsuarioController {
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @Operation(summary = "Eliminar (baja lógica) un usuario")
+  @Operation(operationId = "eliminarUsuario", summary = "Eliminar (baja lógica) un usuario")
   public void eliminar(@PathVariable Long id) {
     service.eliminar(id);
   }

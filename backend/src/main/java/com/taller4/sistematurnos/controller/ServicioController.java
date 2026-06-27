@@ -33,26 +33,26 @@ public class ServicioController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('ADMIN')")
-  @Operation(summary = "Crear un servicio")
+  @Operation(operationId = "crearServicio", summary = "Crear un servicio")
   public ServicioSalidaDTO crear(@Valid @RequestBody ServicioEntradaDTO dto) {
     return service.crear(dto);
   }
 
   @GetMapping
-  @Operation(summary = "Listar todos los servicios")
+  @Operation(operationId = "listarServicios", summary = "Listar todos los servicios")
   public List<ServicioSalidaDTO> listar() {
     return service.listar();
   }
 
   @GetMapping("/{id}")
-  @Operation(summary = "Obtener un servicio por id")
+  @Operation(operationId = "obtenerServicio", summary = "Obtener un servicio por id")
   public ServicioSalidaDTO obtener(@PathVariable Long id) {
     return service.obtener(id);
   }
 
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ADMIN')")
-  @Operation(summary = "Actualizar un servicio")
+  @Operation(operationId = "actualizarServicio", summary = "Actualizar un servicio")
   public ServicioSalidaDTO actualizar(
       @PathVariable Long id, @Valid @RequestBody ServicioEntradaDTO dto) {
     return service.actualizar(id, dto);
@@ -61,7 +61,7 @@ public class ServicioController {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('ADMIN')")
-  @Operation(summary = "Eliminar un servicio")
+  @Operation(operationId = "eliminarServicio", summary = "Eliminar un servicio")
   public void eliminar(@PathVariable Long id) {
     service.eliminar(id);
   }

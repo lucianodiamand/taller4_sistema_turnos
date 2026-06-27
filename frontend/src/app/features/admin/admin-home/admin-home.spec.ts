@@ -1,22 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AdminHomeComponent } from './admin-home';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
-describe('AdminHomeComponent', () => {
-  let component: AdminHomeComponent;
-  let fixture: ComponentFixture<AdminHomeComponent>;
+import { AdminHome } from './admin-home';
 
+describe('AdminHome', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminHomeComponent, RouterTestingModule],
+      imports: [AdminHome],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
     }).compileComponents();
-
-    fixture = TestBed.createComponent(AdminHomeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('muestra enlaces a los módulos de administración', () => {
+  it('muestra accesos a los módulos de administración', async () => {
+    const fixture = TestBed.createComponent(AdminHome);
+    await fixture.whenStable();
     const html = fixture.nativeElement as HTMLElement;
     expect(html.textContent).toContain('Servicios');
     expect(html.textContent).toContain('Profesionales');

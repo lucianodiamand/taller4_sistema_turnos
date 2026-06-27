@@ -5,7 +5,7 @@
  * OpenAPI spec version: v1
  */
 
-export type ListarParams = {
-clienteId?: number;
-profesionalId?: number;
+export type ListarTurnosParams = {
+  clienteId?: number;
+  profesionalId?: number;
 };

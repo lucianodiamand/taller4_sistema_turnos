@@ -1,30 +1,55 @@
-<section class="admin-module">
-  <div class="module-header">
+<mat-card appearance="outlined" class="modulo">
+  <div class="cabecera">
     <div>
-      <h2>Profesionales</h2>
-      <p>Alta, edición y eliminación de profesionales con usuario asociado.</p>
+      <h1>Profesionales</h1>
+      <p>Alta, edición y baja de profesionales.</p>
     </div>
-    <button type="button" class="primary" (click)="openCreate()">Nuevo profesional</button>
+    <button mat-flat-button (click)="nuevo()">
+      <mat-icon>add</mat-icon>
+      Nuevo profesional
+    </button>
   </div>
 
-  <app-admin-entity-form
-    *ngIf="showForm"
-    title="{{ editingId ? 'Editar profesional' : 'Crear profesional' }}"
-    submitLabel="Guardar"
-    [model]="formModel"
-    [fields]="fields"
-    (submitForm)="onSubmit($event)"
-    (cancelForm)="showForm = false"
-  ></app-admin-entity-form>
+  @if (mostrarForm()) {
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+      @if (creando()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" formControlName="password" />
+        </mat-form-field>
+      }
+      <mat-form-field appearance="outline">
+        <mat-label>Especialidad</mat-label>
+        <input matInput formControlName="especialidad" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="telefono" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Bio</mat-label>
+        <textarea matInput formControlName="bio" rows="2"></textarea>
+      </mat-form-field>
+      <div class="acciones-form">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-flat-button type="submit" [disabled]="cargando()">Guardar</button>
+      </div>
+    </form>
+  }
 
-  <div class="table-wrapper">
-    <p *ngIf="isLoading">Cargando...</p>
-    <app-admin-data-table
-      [items]="items"
-      [columns]="columns"
-      emptyMessage="No hay profesionales cargados."
-      (edit)="openEdit($event)"
-      (remove)="onRemove($event)"
-    ></app-admin-data-table>
-  </div>
-</section>
+  <app-data-table
+    [columns]="columnas"
+    [data]="items()"
+    emptyMessage="No hay profesionales cargados."
+    (editar)="editar($event)"
+    (eliminar)="eliminar($event)"
+  />
+</mat-card>

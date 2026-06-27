@@ -4,39 +4,21 @@
  * Sistema de Turnos API
  * OpenAPI spec version: v1
  */
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpResponse as AngularHttpResponse
-} from '@angular/common/http';
-import type {
-  HttpContext,
-  HttpEvent,
-  HttpParams
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse as AngularHttpResponse } from '@angular/common/http';
+import type { HttpContext, HttpEvent, HttpParams } from '@angular/common/http';
 
-import {
-  Injectable,
-  inject
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
-import type {
-  ServicioEntradaDTO,
-  ServicioSalidaDTO
-} from '../model';
-
-
+import type { ServicioEntradaDTO, ServicioSalidaDTO } from '../model';
 
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
   readonly params?:
-        | HttpParams
-      | Record<string, string | number | boolean | Array<string | number | boolean>>;
+    | HttpParams
+    | Record<string, string | number | boolean | Array<string | number | boolean>>;
   readonly reportProgress?: boolean;
   readonly withCredentials?: boolean;
   readonly credentials?: RequestCredentials;
@@ -48,7 +30,7 @@ interface HttpClientOptions {
   readonly referrer?: string;
   readonly integrity?: string;
   readonly referrerPolicy?: ReferrerPolicy;
-  readonly transferCache?: {includeHeaders?: string[]} | boolean;
+  readonly transferCache?: { includeHeaders?: string[] } | boolean;
   readonly timeout?: number;
 }
 
@@ -68,189 +50,192 @@ type HttpClientObserveOptions = HttpClientOptions & {
   readonly observe?: 'body' | 'events' | 'response';
 };
 
-
-
-
-
-
-
 @Injectable({ providedIn: 'root' })
 export class ServicioService {
   private readonly http = inject(HttpClient);
-/**
- * @summary Obtener un servicio por id
- */
- obtener1<TData = ServicioSalidaDTO>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
- obtener1<TData = ServicioSalidaDTO>(id: number, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- obtener1<TData = ServicioSalidaDTO>(id: number, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  obtener1<TData = ServicioSalidaDTO>(
-    id: number, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
-    if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/servicios/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'events',
-      }
-    );
-    }
-
-    if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/servicios/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'response',
-      }
-    );
-    }
-
-    return this.http.get<TData>(
-      `/api/servicios/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
-  }
-/**
- * @summary Actualizar un servicio
- */
- actualizar1<TData = ServicioSalidaDTO>(id: number,
-    servicioEntradaDTO: ServicioEntradaDTO, options?: HttpClientBodyOptions): Observable<TData>;
- actualizar1<TData = ServicioSalidaDTO>(id: number,
-    servicioEntradaDTO: ServicioEntradaDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- actualizar1<TData = ServicioSalidaDTO>(id: number,
-    servicioEntradaDTO: ServicioEntradaDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  actualizar1<TData = ServicioSalidaDTO>(
+  /**
+   * @summary Obtener un servicio por id
+   */
+  obtenerServicio<TData = ServicioSalidaDTO>(
     id: number,
-    servicioEntradaDTO: ServicioEntradaDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  obtenerServicio<TData = ServicioSalidaDTO>(
+    id: number,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  obtenerServicio<TData = ServicioSalidaDTO>(
+    id: number,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  obtenerServicio<TData = ServicioSalidaDTO>(
+    id: number,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.put<TData>(
-      `/api/servicios/${id}`,
-      servicioEntradaDTO,{
+      return this.http.get<TData>(`/api/servicios/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.put<TData>(
-      `/api/servicios/${id}`,
-      servicioEntradaDTO,{
+      return this.http.get<TData>(`/api/servicios/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.put<TData>(
-      `/api/servicios/${id}`,
-      servicioEntradaDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.get<TData>(`/api/servicios/${id}`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Eliminar un servicio
- */
- eliminar1<TData = void>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
- eliminar1<TData = void>(id: number, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- eliminar1<TData = void>(id: number, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  eliminar1<TData = void>(
-    id: number, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Actualizar un servicio
+   */
+  actualizarServicio<TData = ServicioSalidaDTO>(
+    id: number,
+    servicioEntradaDTO: ServicioEntradaDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  actualizarServicio<TData = ServicioSalidaDTO>(
+    id: number,
+    servicioEntradaDTO: ServicioEntradaDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  actualizarServicio<TData = ServicioSalidaDTO>(
+    id: number,
+    servicioEntradaDTO: ServicioEntradaDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  actualizarServicio<TData = ServicioSalidaDTO>(
+    id: number,
+    servicioEntradaDTO: ServicioEntradaDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.delete<TData>(
-      `/api/servicios/${id}`,{
+      return this.http.put<TData>(`/api/servicios/${id}`, servicioEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.delete<TData>(
-      `/api/servicios/${id}`,{
+      return this.http.put<TData>(`/api/servicios/${id}`, servicioEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.delete<TData>(
-      `/api/servicios/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.put<TData>(`/api/servicios/${id}`, servicioEntradaDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Listar todos los servicios
- */
- listar1<TData = ServicioSalidaDTO[]>( options?: HttpClientBodyOptions): Observable<TData>;
- listar1<TData = ServicioSalidaDTO[]>( options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- listar1<TData = ServicioSalidaDTO[]>( options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  listar1<TData = ServicioSalidaDTO[]>(
-     options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Eliminar un servicio
+   */
+  eliminarServicio<TData = void>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
+  eliminarServicio<TData = void>(
+    id: number,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  eliminarServicio<TData = void>(
+    id: number,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  eliminarServicio<TData = void>(
+    id: number,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/servicios`,{
+      return this.http.delete<TData>(`/api/servicios/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/servicios`,{
+      return this.http.delete<TData>(`/api/servicios/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.get<TData>(
-      `/api/servicios`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.delete<TData>(`/api/servicios/${id}`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Crear un servicio
- */
- crear1<TData = ServicioSalidaDTO>(servicioEntradaDTO: ServicioEntradaDTO, options?: HttpClientBodyOptions): Observable<TData>;
- crear1<TData = ServicioSalidaDTO>(servicioEntradaDTO: ServicioEntradaDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- crear1<TData = ServicioSalidaDTO>(servicioEntradaDTO: ServicioEntradaDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  crear1<TData = ServicioSalidaDTO>(
-    servicioEntradaDTO: ServicioEntradaDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Listar todos los servicios
+   */
+  listarServicios<TData = ServicioSalidaDTO[]>(options?: HttpClientBodyOptions): Observable<TData>;
+  listarServicios<TData = ServicioSalidaDTO[]>(
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  listarServicios<TData = ServicioSalidaDTO[]>(
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  listarServicios<TData = ServicioSalidaDTO[]>(
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.post<TData>(
-      `/api/servicios`,
-      servicioEntradaDTO,{
+      return this.http.get<TData>(`/api/servicios`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.post<TData>(
-      `/api/servicios`,
-      servicioEntradaDTO,{
+      return this.http.get<TData>(`/api/servicios`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.post<TData>(
-      `/api/servicios`,
-      servicioEntradaDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.get<TData>(`/api/servicios`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-};
+  /**
+   * @summary Crear un servicio
+   */
+  crearServicio<TData = ServicioSalidaDTO>(
+    servicioEntradaDTO: ServicioEntradaDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  crearServicio<TData = ServicioSalidaDTO>(
+    servicioEntradaDTO: ServicioEntradaDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  crearServicio<TData = ServicioSalidaDTO>(
+    servicioEntradaDTO: ServicioEntradaDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  crearServicio<TData = ServicioSalidaDTO>(
+    servicioEntradaDTO: ServicioEntradaDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    if (options?.observe === 'events') {
+      return this.http.post<TData>(`/api/servicios`, servicioEntradaDTO, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'events',
+      });
+    }
 
+    if (options?.observe === 'response') {
+      return this.http.post<TData>(`/api/servicios`, servicioEntradaDTO, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'response',
+      });
+    }
+
+    return this.http.post<TData>(`/api/servicios`, servicioEntradaDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
+  }
+}

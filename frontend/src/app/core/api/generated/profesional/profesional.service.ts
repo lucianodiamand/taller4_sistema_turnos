@@ -4,40 +4,21 @@
  * Sistema de Turnos API
  * OpenAPI spec version: v1
  */
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpResponse as AngularHttpResponse
-} from '@angular/common/http';
-import type {
-  HttpContext,
-  HttpEvent,
-  HttpParams
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse as AngularHttpResponse } from '@angular/common/http';
+import type { HttpContext, HttpEvent, HttpParams } from '@angular/common/http';
 
-import {
-  Injectable,
-  inject
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
-import type {
-  PerfilProfesionalDTO,
-  ProfesionalEntradaDTO,
-  ProfesionalSalidaDTO
-} from '../model';
-
-
+import type { PerfilProfesionalDTO, ProfesionalEntradaDTO, ProfesionalSalidaDTO } from '../model';
 
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
   readonly params?:
-        | HttpParams
-      | Record<string, string | number | boolean | Array<string | number | boolean>>;
+    | HttpParams
+    | Record<string, string | number | boolean | Array<string | number | boolean>>;
   readonly reportProgress?: boolean;
   readonly withCredentials?: boolean;
   readonly credentials?: RequestCredentials;
@@ -49,7 +30,7 @@ interface HttpClientOptions {
   readonly referrer?: string;
   readonly integrity?: string;
   readonly referrerPolicy?: ReferrerPolicy;
-  readonly transferCache?: {includeHeaders?: string[]} | boolean;
+  readonly transferCache?: { includeHeaders?: string[] } | boolean;
   readonly timeout?: number;
 }
 
@@ -69,258 +50,266 @@ type HttpClientObserveOptions = HttpClientOptions & {
   readonly observe?: 'body' | 'events' | 'response';
 };
 
-
-
-
-
-
-
 @Injectable({ providedIn: 'root' })
 export class ProfesionalService {
   private readonly http = inject(HttpClient);
-/**
- * @summary Obtener un profesional por id
- */
- obtener2<TData = ProfesionalSalidaDTO>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
- obtener2<TData = ProfesionalSalidaDTO>(id: number, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- obtener2<TData = ProfesionalSalidaDTO>(id: number, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  obtener2<TData = ProfesionalSalidaDTO>(
-    id: number, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
-    if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/profesionales/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'events',
-      }
-    );
-    }
-
-    if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/profesionales/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'response',
-      }
-    );
-    }
-
-    return this.http.get<TData>(
-      `/api/profesionales/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
-  }
-/**
- * @summary Actualizar un profesional
- */
- actualizar2<TData = ProfesionalSalidaDTO>(id: number,
-    profesionalEntradaDTO: ProfesionalEntradaDTO, options?: HttpClientBodyOptions): Observable<TData>;
- actualizar2<TData = ProfesionalSalidaDTO>(id: number,
-    profesionalEntradaDTO: ProfesionalEntradaDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- actualizar2<TData = ProfesionalSalidaDTO>(id: number,
-    profesionalEntradaDTO: ProfesionalEntradaDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  actualizar2<TData = ProfesionalSalidaDTO>(
+  /**
+   * @summary Obtener un profesional por id
+   */
+  obtenerProfesional<TData = ProfesionalSalidaDTO>(
     id: number,
-    profesionalEntradaDTO: ProfesionalEntradaDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  obtenerProfesional<TData = ProfesionalSalidaDTO>(
+    id: number,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  obtenerProfesional<TData = ProfesionalSalidaDTO>(
+    id: number,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  obtenerProfesional<TData = ProfesionalSalidaDTO>(
+    id: number,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.put<TData>(
-      `/api/profesionales/${id}`,
-      profesionalEntradaDTO,{
+      return this.http.get<TData>(`/api/profesionales/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.put<TData>(
-      `/api/profesionales/${id}`,
-      profesionalEntradaDTO,{
+      return this.http.get<TData>(`/api/profesionales/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.put<TData>(
-      `/api/profesionales/${id}`,
-      profesionalEntradaDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.get<TData>(`/api/profesionales/${id}`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Eliminar un profesional
- */
- eliminar2<TData = void>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
- eliminar2<TData = void>(id: number, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- eliminar2<TData = void>(id: number, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  eliminar2<TData = void>(
-    id: number, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Actualizar un profesional
+   */
+  actualizarProfesional<TData = ProfesionalSalidaDTO>(
+    id: number,
+    profesionalEntradaDTO: ProfesionalEntradaDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  actualizarProfesional<TData = ProfesionalSalidaDTO>(
+    id: number,
+    profesionalEntradaDTO: ProfesionalEntradaDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  actualizarProfesional<TData = ProfesionalSalidaDTO>(
+    id: number,
+    profesionalEntradaDTO: ProfesionalEntradaDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  actualizarProfesional<TData = ProfesionalSalidaDTO>(
+    id: number,
+    profesionalEntradaDTO: ProfesionalEntradaDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.delete<TData>(
-      `/api/profesionales/${id}`,{
+      return this.http.put<TData>(`/api/profesionales/${id}`, profesionalEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.delete<TData>(
-      `/api/profesionales/${id}`,{
+      return this.http.put<TData>(`/api/profesionales/${id}`, profesionalEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.delete<TData>(
-      `/api/profesionales/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.put<TData>(`/api/profesionales/${id}`, profesionalEntradaDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Obtener el profesional del usuario autenticado
- */
- obtenerMio<TData = ProfesionalSalidaDTO>( options?: HttpClientBodyOptions): Observable<TData>;
- obtenerMio<TData = ProfesionalSalidaDTO>( options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- obtenerMio<TData = ProfesionalSalidaDTO>( options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  obtenerMio<TData = ProfesionalSalidaDTO>(
-     options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Eliminar un profesional
+   */
+  eliminarProfesional<TData = void>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
+  eliminarProfesional<TData = void>(
+    id: number,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  eliminarProfesional<TData = void>(
+    id: number,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  eliminarProfesional<TData = void>(
+    id: number,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/profesionales/me`,{
+      return this.http.delete<TData>(`/api/profesionales/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/profesionales/me`,{
+      return this.http.delete<TData>(`/api/profesionales/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.get<TData>(
-      `/api/profesionales/me`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.delete<TData>(`/api/profesionales/${id}`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Editar el perfil profesional propio (especialidad/bio/teléfono)
- */
- actualizarMiPerfil<TData = ProfesionalSalidaDTO>(perfilProfesionalDTO: PerfilProfesionalDTO, options?: HttpClientBodyOptions): Observable<TData>;
- actualizarMiPerfil<TData = ProfesionalSalidaDTO>(perfilProfesionalDTO: PerfilProfesionalDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- actualizarMiPerfil<TData = ProfesionalSalidaDTO>(perfilProfesionalDTO: PerfilProfesionalDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  actualizarMiPerfil<TData = ProfesionalSalidaDTO>(
-    perfilProfesionalDTO: PerfilProfesionalDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Obtener el profesional del usuario autenticado
+   */
+  obtenerMiProfesional<TData = ProfesionalSalidaDTO>(
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  obtenerMiProfesional<TData = ProfesionalSalidaDTO>(
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  obtenerMiProfesional<TData = ProfesionalSalidaDTO>(
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  obtenerMiProfesional<TData = ProfesionalSalidaDTO>(
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.put<TData>(
-      `/api/profesionales/me`,
-      perfilProfesionalDTO,{
+      return this.http.get<TData>(`/api/profesionales/me`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.put<TData>(
-      `/api/profesionales/me`,
-      perfilProfesionalDTO,{
+      return this.http.get<TData>(`/api/profesionales/me`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.put<TData>(
-      `/api/profesionales/me`,
-      perfilProfesionalDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.get<TData>(`/api/profesionales/me`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Listar todos los profesionales
- */
- listar2<TData = ProfesionalSalidaDTO[]>( options?: HttpClientBodyOptions): Observable<TData>;
- listar2<TData = ProfesionalSalidaDTO[]>( options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- listar2<TData = ProfesionalSalidaDTO[]>( options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  listar2<TData = ProfesionalSalidaDTO[]>(
-     options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Editar el perfil profesional propio (especialidad/bio/teléfono)
+   */
+  actualizarMiProfesional<TData = ProfesionalSalidaDTO>(
+    perfilProfesionalDTO: PerfilProfesionalDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  actualizarMiProfesional<TData = ProfesionalSalidaDTO>(
+    perfilProfesionalDTO: PerfilProfesionalDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  actualizarMiProfesional<TData = ProfesionalSalidaDTO>(
+    perfilProfesionalDTO: PerfilProfesionalDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  actualizarMiProfesional<TData = ProfesionalSalidaDTO>(
+    perfilProfesionalDTO: PerfilProfesionalDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/profesionales`,{
+      return this.http.put<TData>(`/api/profesionales/me`, perfilProfesionalDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/profesionales`,{
+      return this.http.put<TData>(`/api/profesionales/me`, perfilProfesionalDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.get<TData>(
-      `/api/profesionales`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.put<TData>(`/api/profesionales/me`, perfilProfesionalDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Crear un profesional
- */
- crear2<TData = ProfesionalSalidaDTO>(profesionalEntradaDTO: ProfesionalEntradaDTO, options?: HttpClientBodyOptions): Observable<TData>;
- crear2<TData = ProfesionalSalidaDTO>(profesionalEntradaDTO: ProfesionalEntradaDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- crear2<TData = ProfesionalSalidaDTO>(profesionalEntradaDTO: ProfesionalEntradaDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  crear2<TData = ProfesionalSalidaDTO>(
-    profesionalEntradaDTO: ProfesionalEntradaDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Listar todos los profesionales
+   */
+  listarProfesionales<TData = ProfesionalSalidaDTO[]>(
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  listarProfesionales<TData = ProfesionalSalidaDTO[]>(
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  listarProfesionales<TData = ProfesionalSalidaDTO[]>(
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  listarProfesionales<TData = ProfesionalSalidaDTO[]>(
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.post<TData>(
-      `/api/profesionales`,
-      profesionalEntradaDTO,{
+      return this.http.get<TData>(`/api/profesionales`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.post<TData>(
-      `/api/profesionales`,
-      profesionalEntradaDTO,{
+      return this.http.get<TData>(`/api/profesionales`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.post<TData>(
-      `/api/profesionales`,
-      profesionalEntradaDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.get<TData>(`/api/profesionales`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-};
+  /**
+   * @summary Crear un profesional
+   */
+  crearProfesional<TData = ProfesionalSalidaDTO>(
+    profesionalEntradaDTO: ProfesionalEntradaDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  crearProfesional<TData = ProfesionalSalidaDTO>(
+    profesionalEntradaDTO: ProfesionalEntradaDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  crearProfesional<TData = ProfesionalSalidaDTO>(
+    profesionalEntradaDTO: ProfesionalEntradaDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  crearProfesional<TData = ProfesionalSalidaDTO>(
+    profesionalEntradaDTO: ProfesionalEntradaDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    if (options?.observe === 'events') {
+      return this.http.post<TData>(`/api/profesionales`, profesionalEntradaDTO, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'events',
+      });
+    }
 
+    if (options?.observe === 'response') {
+      return this.http.post<TData>(`/api/profesionales`, profesionalEntradaDTO, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'response',
+      });
+    }
+
+    return this.http.post<TData>(`/api/profesionales`, profesionalEntradaDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
+  }
+}

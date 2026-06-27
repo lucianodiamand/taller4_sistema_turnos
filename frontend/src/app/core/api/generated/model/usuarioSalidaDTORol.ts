@@ -5,8 +5,7 @@
  * OpenAPI spec version: v1
  */
 
-export type UsuarioSalidaDTORol = typeof UsuarioSalidaDTORol[keyof typeof UsuarioSalidaDTORol];
-
+export type UsuarioSalidaDTORol = (typeof UsuarioSalidaDTORol)[keyof typeof UsuarioSalidaDTORol];
 
 export const UsuarioSalidaDTORol = {
   ADMIN: 'ADMIN',

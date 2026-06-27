@@ -5,6 +5,6 @@
  * OpenAPI spec version: v1
  */
 
-export type Listar3Params = {
-profesionalId?: number;
+export type ListarDisponibilidadesParams = {
+  profesionalId?: number;
 };

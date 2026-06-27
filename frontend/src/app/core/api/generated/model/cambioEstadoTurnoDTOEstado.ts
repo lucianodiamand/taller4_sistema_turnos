@@ -5,8 +5,8 @@
  * OpenAPI spec version: v1
  */
 
-export type CambioEstadoTurnoDTOEstado = typeof CambioEstadoTurnoDTOEstado[keyof typeof CambioEstadoTurnoDTOEstado];
-
+export type CambioEstadoTurnoDTOEstado =
+  (typeof CambioEstadoTurnoDTOEstado)[keyof typeof CambioEstadoTurnoDTOEstado];
 
 export const CambioEstadoTurnoDTOEstado = {
   PENDIENTE: 'PENDIENTE',

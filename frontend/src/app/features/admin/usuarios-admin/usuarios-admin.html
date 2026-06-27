@@ -1,29 +1,44 @@
-<section class="admin-module">
-  <div class="module-header">
+<mat-card appearance="outlined" class="modulo">
+  <div class="cabecera">
     <div>
-      <h2>Usuarios</h2>
-      <p>Listado, edición y baja lógica de usuarios del sistema.</p>
+      <h1>Usuarios</h1>
+      <p>
+        Edición y baja lógica de usuarios. El alta es por registro o por el ABM de profesionales.
+      </p>
     </div>
   </div>
 
-  <app-admin-entity-form
-    *ngIf="showForm"
-    title="Editar usuario"
-    submitLabel="Guardar"
-    [model]="formModel"
-    [fields]="fields"
-    (submitForm)="onSubmit($event)"
-    (cancelForm)="showForm = false"
-  ></app-admin-entity-form>
+  @if (mostrarForm()) {
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rol">
+          @for (rol of roles; track rol) {
+            <mat-option [value]="rol">{{ rol }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-checkbox formControlName="activo">Activo</mat-checkbox>
+      <div class="acciones-form">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-flat-button type="submit" [disabled]="cargando()">Guardar</button>
+      </div>
+    </form>
+  }
 
-  <div class="table-wrapper">
-    <p *ngIf="isLoading">Cargando...</p>
-    <app-admin-data-table
-      [items]="items"
-      [columns]="columns"
-      emptyMessage="No hay usuarios cargados."
-      (edit)="openEdit($event)"
-      (remove)="onRemove($event)"
-    ></app-admin-data-table>
-  </div>
-</section>
+  <app-data-table
+    [columns]="columnas"
+    [data]="items()"
+    emptyMessage="No hay usuarios cargados."
+    (editar)="editar($event)"
+    (eliminar)="eliminar($event)"
+  />
+</mat-card>

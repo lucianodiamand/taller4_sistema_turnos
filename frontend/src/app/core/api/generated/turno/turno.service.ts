@@ -4,41 +4,26 @@
  * Sistema de Turnos API
  * OpenAPI spec version: v1
  */
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpResponse as AngularHttpResponse
-} from '@angular/common/http';
-import type {
-  HttpContext,
-  HttpEvent,
-  HttpParams
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse as AngularHttpResponse } from '@angular/common/http';
+import type { HttpContext, HttpEvent, HttpParams } from '@angular/common/http';
 
-import {
-  Injectable,
-  inject
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
 import type {
   CambioEstadoTurnoDTO,
-  ListarParams,
+  ListarTurnosParams,
   TurnoEntradaDTO,
-  TurnoSalidaDTO
+  TurnoSalidaDTO,
 } from '../model';
-
-
 
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
   readonly params?:
-        | HttpParams
-      | Record<string, string | number | boolean | Array<string | number | boolean>>;
+    | HttpParams
+    | Record<string, string | number | boolean | Array<string | number | boolean>>;
   readonly reportProgress?: boolean;
   readonly withCredentials?: boolean;
   readonly credentials?: RequestCredentials;
@@ -50,7 +35,7 @@ interface HttpClientOptions {
   readonly referrer?: string;
   readonly integrity?: string;
   readonly referrerPolicy?: ReferrerPolicy;
-  readonly transferCache?: {includeHeaders?: string[]} | boolean;
+  readonly transferCache?: { includeHeaders?: string[] } | boolean;
   readonly timeout?: number;
 }
 
@@ -109,24 +94,16 @@ function filterParams(
       const filtered = value.filter(
         (item) =>
           item != null &&
-          (typeof item === 'string' ||
-            typeof item === 'number' ||
-            typeof item === 'boolean'),
+          (typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean'),
       ) as Array<string | number | boolean>;
       if (filtered.length) {
         filteredParams[key] = filtered;
       }
-    } else if (
-      preserveRequiredNullables &&
-      value === null &&
-      requiredNullableKeys.has(key)
-    ) {
+    } else if (preserveRequiredNullables && value === null && requiredNullableKeys.has(key)) {
       filteredParams[key] = null;
     } else if (
       value != null &&
-      (typeof value === 'string' ||
-        typeof value === 'number' ||
-        typeof value === 'boolean')
+      (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean')
     ) {
       filteredParams[key] = value;
     }
@@ -134,156 +111,168 @@ function filterParams(
   return filteredParams;
 }
 
-
-
-
-
 @Injectable({ providedIn: 'root' })
 export class TurnoService {
   private readonly http = inject(HttpClient);
-/**
- * @summary Listar turnos, opcionalmente por cliente o por profesional
- */
- listar<TData = TurnoSalidaDTO[]>(params?: ListarParams, options?: HttpClientBodyOptions): Observable<TData>;
- listar<TData = TurnoSalidaDTO[]>(params?: ListarParams, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- listar<TData = TurnoSalidaDTO[]>(params?: ListarParams, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  listar<TData = TurnoSalidaDTO[]>(
-    params?: ListarParams, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
-    const filteredParams = filterParams({...params, ...options?.params}, new Set<string>([]));
+  /**
+   * @summary Listar turnos, opcionalmente por cliente o por profesional
+   */
+  listarTurnos<TData = TurnoSalidaDTO[]>(
+    params?: ListarTurnosParams,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  listarTurnos<TData = TurnoSalidaDTO[]>(
+    params?: ListarTurnosParams,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  listarTurnos<TData = TurnoSalidaDTO[]>(
+    params?: ListarTurnosParams,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  listarTurnos<TData = TurnoSalidaDTO[]>(
+    params?: ListarTurnosParams,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    const filteredParams = filterParams({ ...params, ...options?.params }, new Set<string>([]));
 
     if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/turnos`,{
-    ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      return this.http.get<TData>(`/api/turnos`, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-        params: filteredParams,}
-    );
+        params: filteredParams,
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/turnos`,{
-    ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      return this.http.get<TData>(`/api/turnos`, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-        params: filteredParams,}
-    );
+        params: filteredParams,
+      });
     }
 
-    return this.http.get<TData>(
-      `/api/turnos`,{
-    ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-        params: filteredParams,}
-    );
+    return this.http.get<TData>(`/api/turnos`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+      params: filteredParams,
+    });
   }
-/**
- * @summary Crear un turno (estado inicial PENDIENTE)
- */
- crear<TData = TurnoSalidaDTO>(turnoEntradaDTO: TurnoEntradaDTO, options?: HttpClientBodyOptions): Observable<TData>;
- crear<TData = TurnoSalidaDTO>(turnoEntradaDTO: TurnoEntradaDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- crear<TData = TurnoSalidaDTO>(turnoEntradaDTO: TurnoEntradaDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  crear<TData = TurnoSalidaDTO>(
-    turnoEntradaDTO: TurnoEntradaDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Crear un turno (estado inicial PENDIENTE)
+   */
+  crearTurno<TData = TurnoSalidaDTO>(
+    turnoEntradaDTO: TurnoEntradaDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  crearTurno<TData = TurnoSalidaDTO>(
+    turnoEntradaDTO: TurnoEntradaDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  crearTurno<TData = TurnoSalidaDTO>(
+    turnoEntradaDTO: TurnoEntradaDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  crearTurno<TData = TurnoSalidaDTO>(
+    turnoEntradaDTO: TurnoEntradaDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.post<TData>(
-      `/api/turnos`,
-      turnoEntradaDTO,{
+      return this.http.post<TData>(`/api/turnos`, turnoEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.post<TData>(
-      `/api/turnos`,
-      turnoEntradaDTO,{
+      return this.http.post<TData>(`/api/turnos`, turnoEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.post<TData>(
-      `/api/turnos`,
-      turnoEntradaDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.post<TData>(`/api/turnos`, turnoEntradaDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Cambiar el estado de un turno (el cliente lo usa para cancelar)
- */
- cambiarEstado<TData = TurnoSalidaDTO>(id: number,
-    cambioEstadoTurnoDTO: CambioEstadoTurnoDTO, options?: HttpClientBodyOptions): Observable<TData>;
- cambiarEstado<TData = TurnoSalidaDTO>(id: number,
-    cambioEstadoTurnoDTO: CambioEstadoTurnoDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- cambiarEstado<TData = TurnoSalidaDTO>(id: number,
-    cambioEstadoTurnoDTO: CambioEstadoTurnoDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  cambiarEstado<TData = TurnoSalidaDTO>(
+  /**
+   * @summary Cambiar el estado de un turno (el cliente lo usa para cancelar)
+   */
+  cambiarEstadoTurno<TData = TurnoSalidaDTO>(
     id: number,
-    cambioEstadoTurnoDTO: CambioEstadoTurnoDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    cambioEstadoTurnoDTO: CambioEstadoTurnoDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  cambiarEstadoTurno<TData = TurnoSalidaDTO>(
+    id: number,
+    cambioEstadoTurnoDTO: CambioEstadoTurnoDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  cambiarEstadoTurno<TData = TurnoSalidaDTO>(
+    id: number,
+    cambioEstadoTurnoDTO: CambioEstadoTurnoDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  cambiarEstadoTurno<TData = TurnoSalidaDTO>(
+    id: number,
+    cambioEstadoTurnoDTO: CambioEstadoTurnoDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.patch<TData>(
-      `/api/turnos/${id}/estado`,
-      cambioEstadoTurnoDTO,{
+      return this.http.patch<TData>(`/api/turnos/${id}/estado`, cambioEstadoTurnoDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.patch<TData>(
-      `/api/turnos/${id}/estado`,
-      cambioEstadoTurnoDTO,{
+      return this.http.patch<TData>(`/api/turnos/${id}/estado`, cambioEstadoTurnoDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.patch<TData>(
-      `/api/turnos/${id}/estado`,
-      cambioEstadoTurnoDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.patch<TData>(`/api/turnos/${id}/estado`, cambioEstadoTurnoDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Obtener un turno por id
- */
- obtener4<TData = TurnoSalidaDTO>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
- obtener4<TData = TurnoSalidaDTO>(id: number, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- obtener4<TData = TurnoSalidaDTO>(id: number, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  obtener4<TData = TurnoSalidaDTO>(
-    id: number, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Obtener un turno por id
+   */
+  obtenerTurno<TData = TurnoSalidaDTO>(
+    id: number,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  obtenerTurno<TData = TurnoSalidaDTO>(
+    id: number,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  obtenerTurno<TData = TurnoSalidaDTO>(
+    id: number,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  obtenerTurno<TData = TurnoSalidaDTO>(
+    id: number,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/turnos/${id}`,{
+      return this.http.get<TData>(`/api/turnos/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/turnos/${id}`,{
+      return this.http.get<TData>(`/api/turnos/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.get<TData>(
-      `/api/turnos/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.get<TData>(`/api/turnos/${id}`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-};
-
+}

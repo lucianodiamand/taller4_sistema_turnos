@@ -10,19 +10,19 @@ export interface ProfesionalEntradaDTO {
   id?: number;
   usuario: UsuarioEntradaDTO;
   /**
-     * @minLength 6
-     * @maxLength 100
-     */
+   * @minLength 6
+   * @maxLength 100
+   */
   password?: string;
   /**
-     * @minLength 0
-     * @maxLength 100
-     */
+   * @minLength 0
+   * @maxLength 100
+   */
   especialidad?: string;
   bio?: string;
   /**
-     * @minLength 0
-     * @maxLength 20
-     */
+   * @minLength 0
+   * @maxLength 20
+   */
   telefono?: string;
 }

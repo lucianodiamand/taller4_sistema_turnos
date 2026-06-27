@@ -34,26 +34,28 @@ public class DisponibilidadController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAnyRole('PROFESIONAL', 'ADMIN')")
-  @Operation(summary = "Crear una disponibilidad")
+  @Operation(operationId = "crearDisponibilidad", summary = "Crear una disponibilidad")
   public DisponibilidadSalidaDTO crear(@Valid @RequestBody DisponibilidadEntradaDTO dto) {
     return service.crear(dto);
   }
 
   @GetMapping
-  @Operation(summary = "Listar disponibilidades, opcionalmente filtradas por profesional")
+  @Operation(
+      operationId = "listarDisponibilidades",
+      summary = "Listar disponibilidades, opcionalmente filtradas por profesional")
   public List<DisponibilidadSalidaDTO> listar(@RequestParam(required = false) Long profesionalId) {
     return service.listar(profesionalId);
   }
 
   @GetMapping("/{id}")
-  @Operation(summary = "Obtener una disponibilidad por id")
+  @Operation(operationId = "obtenerDisponibilidad", summary = "Obtener una disponibilidad por id")
   public DisponibilidadSalidaDTO obtener(@PathVariable Long id) {
     return service.obtener(id);
   }
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAnyRole('PROFESIONAL', 'ADMIN')")
-  @Operation(summary = "Actualizar una disponibilidad")
+  @Operation(operationId = "actualizarDisponibilidad", summary = "Actualizar una disponibilidad")
   public DisponibilidadSalidaDTO actualizar(
       @PathVariable Long id, @Valid @RequestBody DisponibilidadEntradaDTO dto) {
     return service.actualizar(id, dto);
@@ -62,7 +64,7 @@ public class DisponibilidadController {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasAnyRole('PROFESIONAL', 'ADMIN')")
-  @Operation(summary = "Eliminar una disponibilidad")
+  @Operation(operationId = "eliminarDisponibilidad", summary = "Eliminar una disponibilidad")
   public void eliminar(@PathVariable Long id) {
     service.eliminar(id);
   }
