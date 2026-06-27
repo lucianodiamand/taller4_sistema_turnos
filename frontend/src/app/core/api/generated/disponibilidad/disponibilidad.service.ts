@@ -4,40 +4,25 @@
  * Sistema de Turnos API
  * OpenAPI spec version: v1
  */
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpResponse as AngularHttpResponse
-} from '@angular/common/http';
-import type {
-  HttpContext,
-  HttpEvent,
-  HttpParams
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse as AngularHttpResponse } from '@angular/common/http';
+import type { HttpContext, HttpEvent, HttpParams } from '@angular/common/http';
 
-import {
-  Injectable,
-  inject
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
 import type {
   DisponibilidadEntradaDTO,
   DisponibilidadSalidaDTO,
-  Listar3Params
+  ListarDisponibilidadesParams,
 } from '../model';
-
-
 
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
   readonly params?:
-        | HttpParams
-      | Record<string, string | number | boolean | Array<string | number | boolean>>;
+    | HttpParams
+    | Record<string, string | number | boolean | Array<string | number | boolean>>;
   readonly reportProgress?: boolean;
   readonly withCredentials?: boolean;
   readonly credentials?: RequestCredentials;
@@ -49,7 +34,7 @@ interface HttpClientOptions {
   readonly referrer?: string;
   readonly integrity?: string;
   readonly referrerPolicy?: ReferrerPolicy;
-  readonly transferCache?: {includeHeaders?: string[]} | boolean;
+  readonly transferCache?: { includeHeaders?: string[] } | boolean;
   readonly timeout?: number;
 }
 
@@ -108,24 +93,16 @@ function filterParams(
       const filtered = value.filter(
         (item) =>
           item != null &&
-          (typeof item === 'string' ||
-            typeof item === 'number' ||
-            typeof item === 'boolean'),
+          (typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean'),
       ) as Array<string | number | boolean>;
       if (filtered.length) {
         filteredParams[key] = filtered;
       }
-    } else if (
-      preserveRequiredNullables &&
-      value === null &&
-      requiredNullableKeys.has(key)
-    ) {
+    } else if (preserveRequiredNullables && value === null && requiredNullableKeys.has(key)) {
       filteredParams[key] = null;
     } else if (
       value != null &&
-      (typeof value === 'string' ||
-        typeof value === 'number' ||
-        typeof value === 'boolean')
+      (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean')
     ) {
       filteredParams[key] = value;
     }
@@ -133,189 +110,206 @@ function filterParams(
   return filteredParams;
 }
 
-
-
-
-
 @Injectable({ providedIn: 'root' })
 export class DisponibilidadService {
   private readonly http = inject(HttpClient);
-/**
- * @summary Obtener una disponibilidad por id
- */
- obtener3<TData = DisponibilidadSalidaDTO>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
- obtener3<TData = DisponibilidadSalidaDTO>(id: number, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- obtener3<TData = DisponibilidadSalidaDTO>(id: number, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  obtener3<TData = DisponibilidadSalidaDTO>(
-    id: number, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
-    if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/disponibilidades/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'events',
-      }
-    );
-    }
-
-    if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/disponibilidades/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'response',
-      }
-    );
-    }
-
-    return this.http.get<TData>(
-      `/api/disponibilidades/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
-  }
-/**
- * @summary Actualizar una disponibilidad
- */
- actualizar3<TData = DisponibilidadSalidaDTO>(id: number,
-    disponibilidadEntradaDTO: DisponibilidadEntradaDTO, options?: HttpClientBodyOptions): Observable<TData>;
- actualizar3<TData = DisponibilidadSalidaDTO>(id: number,
-    disponibilidadEntradaDTO: DisponibilidadEntradaDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- actualizar3<TData = DisponibilidadSalidaDTO>(id: number,
-    disponibilidadEntradaDTO: DisponibilidadEntradaDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  actualizar3<TData = DisponibilidadSalidaDTO>(
+  /**
+   * @summary Obtener una disponibilidad por id
+   */
+  obtenerDisponibilidad<TData = DisponibilidadSalidaDTO>(
     id: number,
-    disponibilidadEntradaDTO: DisponibilidadEntradaDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  obtenerDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    id: number,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  obtenerDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    id: number,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  obtenerDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    id: number,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.put<TData>(
-      `/api/disponibilidades/${id}`,
-      disponibilidadEntradaDTO,{
+      return this.http.get<TData>(`/api/disponibilidades/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.put<TData>(
-      `/api/disponibilidades/${id}`,
-      disponibilidadEntradaDTO,{
+      return this.http.get<TData>(`/api/disponibilidades/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.put<TData>(
-      `/api/disponibilidades/${id}`,
-      disponibilidadEntradaDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.get<TData>(`/api/disponibilidades/${id}`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Eliminar una disponibilidad
- */
- eliminar3<TData = void>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
- eliminar3<TData = void>(id: number, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- eliminar3<TData = void>(id: number, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  eliminar3<TData = void>(
-    id: number, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Actualizar una disponibilidad
+   */
+  actualizarDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    id: number,
+    disponibilidadEntradaDTO: DisponibilidadEntradaDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  actualizarDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    id: number,
+    disponibilidadEntradaDTO: DisponibilidadEntradaDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  actualizarDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    id: number,
+    disponibilidadEntradaDTO: DisponibilidadEntradaDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  actualizarDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    id: number,
+    disponibilidadEntradaDTO: DisponibilidadEntradaDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.delete<TData>(
-      `/api/disponibilidades/${id}`,{
+      return this.http.put<TData>(`/api/disponibilidades/${id}`, disponibilidadEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.delete<TData>(
-      `/api/disponibilidades/${id}`,{
+      return this.http.put<TData>(`/api/disponibilidades/${id}`, disponibilidadEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.delete<TData>(
-      `/api/disponibilidades/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.put<TData>(`/api/disponibilidades/${id}`, disponibilidadEntradaDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Listar disponibilidades, opcionalmente filtradas por profesional
- */
- listar3<TData = DisponibilidadSalidaDTO[]>(params?: Listar3Params, options?: HttpClientBodyOptions): Observable<TData>;
- listar3<TData = DisponibilidadSalidaDTO[]>(params?: Listar3Params, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- listar3<TData = DisponibilidadSalidaDTO[]>(params?: Listar3Params, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  listar3<TData = DisponibilidadSalidaDTO[]>(
-    params?: Listar3Params, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
-    const filteredParams = filterParams({...params, ...options?.params}, new Set<string>([]));
-
+  /**
+   * @summary Eliminar una disponibilidad
+   */
+  eliminarDisponibilidad<TData = void>(
+    id: number,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  eliminarDisponibilidad<TData = void>(
+    id: number,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  eliminarDisponibilidad<TData = void>(
+    id: number,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  eliminarDisponibilidad<TData = void>(
+    id: number,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/disponibilidades`,{
-    ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      return this.http.delete<TData>(`/api/disponibilidades/${id}`, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-        params: filteredParams,}
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/disponibilidades`,{
-    ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      return this.http.delete<TData>(`/api/disponibilidades/${id}`, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-        params: filteredParams,}
-    );
+      });
     }
 
-    return this.http.get<TData>(
-      `/api/disponibilidades`,{
-    ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-        params: filteredParams,}
-    );
+    return this.http.delete<TData>(`/api/disponibilidades/${id}`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Crear una disponibilidad
- */
- crear3<TData = DisponibilidadSalidaDTO>(disponibilidadEntradaDTO: DisponibilidadEntradaDTO, options?: HttpClientBodyOptions): Observable<TData>;
- crear3<TData = DisponibilidadSalidaDTO>(disponibilidadEntradaDTO: DisponibilidadEntradaDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- crear3<TData = DisponibilidadSalidaDTO>(disponibilidadEntradaDTO: DisponibilidadEntradaDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  crear3<TData = DisponibilidadSalidaDTO>(
-    disponibilidadEntradaDTO: DisponibilidadEntradaDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Listar disponibilidades, opcionalmente filtradas por profesional
+   */
+  listarDisponibilidades<TData = DisponibilidadSalidaDTO[]>(
+    params?: ListarDisponibilidadesParams,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  listarDisponibilidades<TData = DisponibilidadSalidaDTO[]>(
+    params?: ListarDisponibilidadesParams,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  listarDisponibilidades<TData = DisponibilidadSalidaDTO[]>(
+    params?: ListarDisponibilidadesParams,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  listarDisponibilidades<TData = DisponibilidadSalidaDTO[]>(
+    params?: ListarDisponibilidadesParams,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    const filteredParams = filterParams({ ...params, ...options?.params }, new Set<string>([]));
+
     if (options?.observe === 'events') {
-      return this.http.post<TData>(
-      `/api/disponibilidades`,
-      disponibilidadEntradaDTO,{
+      return this.http.get<TData>(`/api/disponibilidades`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+        params: filteredParams,
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.post<TData>(
-      `/api/disponibilidades`,
-      disponibilidadEntradaDTO,{
+      return this.http.get<TData>(`/api/disponibilidades`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+        params: filteredParams,
+      });
     }
 
-    return this.http.post<TData>(
-      `/api/disponibilidades`,
-      disponibilidadEntradaDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.get<TData>(`/api/disponibilidades`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+      params: filteredParams,
+    });
   }
-};
+  /**
+   * @summary Crear una disponibilidad
+   */
+  crearDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    disponibilidadEntradaDTO: DisponibilidadEntradaDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  crearDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    disponibilidadEntradaDTO: DisponibilidadEntradaDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  crearDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    disponibilidadEntradaDTO: DisponibilidadEntradaDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  crearDisponibilidad<TData = DisponibilidadSalidaDTO>(
+    disponibilidadEntradaDTO: DisponibilidadEntradaDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    if (options?.observe === 'events') {
+      return this.http.post<TData>(`/api/disponibilidades`, disponibilidadEntradaDTO, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'events',
+      });
+    }
 
+    if (options?.observe === 'response') {
+      return this.http.post<TData>(`/api/disponibilidades`, disponibilidadEntradaDTO, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'response',
+      });
+    }
+
+    return this.http.post<TData>(`/api/disponibilidades`, disponibilidadEntradaDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
+  }
+}

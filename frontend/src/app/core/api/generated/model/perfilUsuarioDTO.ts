@@ -7,8 +7,8 @@
 
 export interface PerfilUsuarioDTO {
   /**
-     * @minLength 0
-     * @maxLength 100
-     */
+   * @minLength 0
+   * @maxLength 100
+   */
   nombre?: string;
 }

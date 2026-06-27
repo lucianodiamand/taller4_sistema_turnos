@@ -41,6 +41,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return build(HttpStatus.BAD_REQUEST, ex.getMessage(), req, null);
   }
 
+  /** Validación de negocio (ej. password faltante al crear un profesional). */
+  @ExceptionHandler(ValidacionException.class)
+  public ResponseEntity<ErrorDTO> handleValidacion(ValidacionException ex, HttpServletRequest req) {
+    return build(HttpStatus.BAD_REQUEST, ex.getMessage(), req, null);
+  }
+
   /** Credenciales inválidas en el login. */
   @ExceptionHandler(CredencialesInvalidasException.class)
   public ResponseEntity<ErrorDTO> handleCredenciales(

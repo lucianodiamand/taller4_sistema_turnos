@@ -34,13 +34,15 @@ public class TurnoController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAnyRole('CLIENTE', 'ADMIN')")
-  @Operation(summary = "Crear un turno (estado inicial PENDIENTE)")
+  @Operation(operationId = "crearTurno", summary = "Crear un turno (estado inicial PENDIENTE)")
   public TurnoSalidaDTO crear(@Valid @RequestBody TurnoEntradaDTO dto) {
     return service.crear(dto);
   }
 
   @GetMapping
-  @Operation(summary = "Listar turnos, opcionalmente por cliente o por profesional")
+  @Operation(
+      operationId = "listarTurnos",
+      summary = "Listar turnos, opcionalmente por cliente o por profesional")
   public List<TurnoSalidaDTO> listar(
       @RequestParam(required = false) Long clienteId,
       @RequestParam(required = false) Long profesionalId) {
@@ -48,14 +50,16 @@ public class TurnoController {
   }
 
   @GetMapping("/{id}")
-  @Operation(summary = "Obtener un turno por id")
+  @Operation(operationId = "obtenerTurno", summary = "Obtener un turno por id")
   public TurnoSalidaDTO obtener(@PathVariable Long id) {
     return service.obtener(id);
   }
 
   @PatchMapping("/{id}/estado")
   @PreAuthorize("hasAnyRole('CLIENTE', 'PROFESIONAL', 'ADMIN')")
-  @Operation(summary = "Cambiar el estado de un turno (el cliente lo usa para cancelar)")
+  @Operation(
+      operationId = "cambiarEstadoTurno",
+      summary = "Cambiar el estado de un turno (el cliente lo usa para cancelar)")
   public TurnoSalidaDTO cambiarEstado(
       @PathVariable Long id, @Valid @RequestBody CambioEstadoTurnoDTO dto) {
     return service.cambiarEstado(id, dto.estado());

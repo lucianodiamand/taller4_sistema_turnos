@@ -9,14 +9,14 @@ import type { UsuarioEntradaDTORol } from './usuarioEntradaDTORol';
 export interface UsuarioEntradaDTO {
   id?: number;
   /**
-     * @minLength 0
-     * @maxLength 100
-     */
+   * @minLength 0
+   * @maxLength 100
+   */
   nombre?: string;
   /**
-     * @minLength 0
-     * @maxLength 100
-     */
+   * @minLength 0
+   * @maxLength 100
+   */
   email?: string;
   rol: UsuarioEntradaDTORol;
   activo?: boolean;

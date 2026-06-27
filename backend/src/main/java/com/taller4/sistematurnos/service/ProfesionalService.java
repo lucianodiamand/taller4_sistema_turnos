@@ -7,6 +7,7 @@ import com.taller4.sistematurnos.entity.Profesional;
 import com.taller4.sistematurnos.entity.Rol;
 import com.taller4.sistematurnos.entity.Usuario;
 import com.taller4.sistematurnos.exception.RecursoNoEncontradoException;
+import com.taller4.sistematurnos.exception.ValidacionException;
 import com.taller4.sistematurnos.mapper.ProfesionalMapper;
 import com.taller4.sistematurnos.repository.ProfesionalRepository;
 import java.util.List;
@@ -48,6 +49,9 @@ public class ProfesionalService {
   }
 
   public ProfesionalSalidaDTO crear(ProfesionalEntradaDTO dto) {
+    if (dto.password() == null || dto.password().isBlank()) {
+      throw new ValidacionException("La contraseña es obligatoria para crear un profesional");
+    }
     Profesional profesional = ProfesionalMapper.toEntity(dto);
     Usuario usuario = profesional.getUsuario();
     usuario.setPasswordHash(passwordEncoder.encode(dto.password()));

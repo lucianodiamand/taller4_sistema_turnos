@@ -7,18 +7,18 @@
 
 export interface RegistroDTO {
   /**
-     * @minLength 0
-     * @maxLength 100
-     */
+   * @minLength 0
+   * @maxLength 100
+   */
   nombre?: string;
   /**
-     * @minLength 0
-     * @maxLength 100
-     */
+   * @minLength 0
+   * @maxLength 100
+   */
   email?: string;
   /**
-     * @minLength 6
-     * @maxLength 100
-     */
+   * @minLength 6
+   * @maxLength 100
+   */
   password?: string;
 }

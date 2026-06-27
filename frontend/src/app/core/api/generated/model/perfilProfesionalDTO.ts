@@ -7,14 +7,14 @@
 
 export interface PerfilProfesionalDTO {
   /**
-     * @minLength 0
-     * @maxLength 100
-     */
+   * @minLength 0
+   * @maxLength 100
+   */
   especialidad?: string;
   bio?: string;
   /**
-     * @minLength 0
-     * @maxLength 20
-     */
+   * @minLength 0
+   * @maxLength 20
+   */
   telefono?: string;
 }

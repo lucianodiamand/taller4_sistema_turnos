@@ -35,41 +35,45 @@ public class ProfesionalController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('ADMIN')")
-  @Operation(summary = "Crear un profesional")
+  @Operation(operationId = "crearProfesional", summary = "Crear un profesional")
   public ProfesionalSalidaDTO crear(@Valid @RequestBody ProfesionalEntradaDTO dto) {
     return service.crear(dto);
   }
 
   @GetMapping
-  @Operation(summary = "Listar todos los profesionales")
+  @Operation(operationId = "listarProfesionales", summary = "Listar todos los profesionales")
   public List<ProfesionalSalidaDTO> listar() {
     return service.listar();
   }
 
   @GetMapping("/me")
   @PreAuthorize("hasRole('PROFESIONAL')")
-  @Operation(summary = "Obtener el profesional del usuario autenticado")
+  @Operation(
+      operationId = "obtenerMiProfesional",
+      summary = "Obtener el profesional del usuario autenticado")
   public ProfesionalSalidaDTO obtenerMio(Principal principal) {
     return service.obtenerPorEmail(principal.getName());
   }
 
   @PutMapping("/me")
   @PreAuthorize("hasRole('PROFESIONAL')")
-  @Operation(summary = "Editar el perfil profesional propio (especialidad/bio/teléfono)")
+  @Operation(
+      operationId = "actualizarMiProfesional",
+      summary = "Editar el perfil profesional propio (especialidad/bio/teléfono)")
   public ProfesionalSalidaDTO actualizarMiPerfil(
       @Valid @RequestBody PerfilProfesionalDTO dto, Principal principal) {
     return service.actualizarMiPerfil(principal.getName(), dto);
   }
 
   @GetMapping("/{id}")
-  @Operation(summary = "Obtener un profesional por id")
+  @Operation(operationId = "obtenerProfesional", summary = "Obtener un profesional por id")
   public ProfesionalSalidaDTO obtener(@PathVariable Long id) {
     return service.obtener(id);
   }
 
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ADMIN')")
-  @Operation(summary = "Actualizar un profesional")
+  @Operation(operationId = "actualizarProfesional", summary = "Actualizar un profesional")
   public ProfesionalSalidaDTO actualizar(
       @PathVariable Long id, @Valid @RequestBody ProfesionalEntradaDTO dto) {
     return service.actualizar(id, dto);
@@ -78,7 +82,7 @@ public class ProfesionalController {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('ADMIN')")
-  @Operation(summary = "Eliminar un profesional")
+  @Operation(operationId = "eliminarProfesional", summary = "Eliminar un profesional")
   public void eliminar(@PathVariable Long id) {
     service.eliminar(id);
   }

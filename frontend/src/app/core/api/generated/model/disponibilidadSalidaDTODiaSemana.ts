@@ -5,8 +5,8 @@
  * OpenAPI spec version: v1
  */
 
-export type DisponibilidadSalidaDTODiaSemana = typeof DisponibilidadSalidaDTODiaSemana[keyof typeof DisponibilidadSalidaDTODiaSemana];
-
+export type DisponibilidadSalidaDTODiaSemana =
+  (typeof DisponibilidadSalidaDTODiaSemana)[keyof typeof DisponibilidadSalidaDTODiaSemana];
 
 export const DisponibilidadSalidaDTODiaSemana = {
   LUNES: 'LUNES',

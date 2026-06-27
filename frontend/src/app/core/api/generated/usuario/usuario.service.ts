@@ -4,40 +4,21 @@
  * Sistema de Turnos API
  * OpenAPI spec version: v1
  */
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpResponse as AngularHttpResponse
-} from '@angular/common/http';
-import type {
-  HttpContext,
-  HttpEvent,
-  HttpParams
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse as AngularHttpResponse } from '@angular/common/http';
+import type { HttpContext, HttpEvent, HttpParams } from '@angular/common/http';
 
-import {
-  Injectable,
-  inject
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
-import type {
-  PerfilUsuarioDTO,
-  UsuarioEntradaDTO,
-  UsuarioSalidaDTO
-} from '../model';
-
-
+import type { PerfilUsuarioDTO, UsuarioEntradaDTO, UsuarioSalidaDTO } from '../model';
 
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
   readonly params?:
-        | HttpParams
-      | Record<string, string | number | boolean | Array<string | number | boolean>>;
+    | HttpParams
+    | Record<string, string | number | boolean | Array<string | number | boolean>>;
   readonly reportProgress?: boolean;
   readonly withCredentials?: boolean;
   readonly credentials?: RequestCredentials;
@@ -49,7 +30,7 @@ interface HttpClientOptions {
   readonly referrer?: string;
   readonly integrity?: string;
   readonly referrerPolicy?: ReferrerPolicy;
-  readonly transferCache?: {includeHeaders?: string[]} | boolean;
+  readonly transferCache?: { includeHeaders?: string[] } | boolean;
   readonly timeout?: number;
 }
 
@@ -69,194 +50,198 @@ type HttpClientObserveOptions = HttpClientOptions & {
   readonly observe?: 'body' | 'events' | 'response';
 };
 
-
-
-
-
-
-
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
   private readonly http = inject(HttpClient);
-/**
- * @summary Obtener un usuario por id
- */
- obtener<TData = UsuarioSalidaDTO>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
- obtener<TData = UsuarioSalidaDTO>(id: number, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- obtener<TData = UsuarioSalidaDTO>(id: number, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  obtener<TData = UsuarioSalidaDTO>(
-    id: number, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
-    if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/usuarios/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'events',
-      }
-    );
-    }
-
-    if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/usuarios/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'response',
-      }
-    );
-    }
-
-    return this.http.get<TData>(
-      `/api/usuarios/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
-  }
-/**
- * @summary Actualizar un usuario
- */
- actualizar<TData = UsuarioSalidaDTO>(id: number,
-    usuarioEntradaDTO: UsuarioEntradaDTO, options?: HttpClientBodyOptions): Observable<TData>;
- actualizar<TData = UsuarioSalidaDTO>(id: number,
-    usuarioEntradaDTO: UsuarioEntradaDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- actualizar<TData = UsuarioSalidaDTO>(id: number,
-    usuarioEntradaDTO: UsuarioEntradaDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  actualizar<TData = UsuarioSalidaDTO>(
+  /**
+   * @summary Obtener un usuario por id
+   */
+  obtenerUsuario<TData = UsuarioSalidaDTO>(
     id: number,
-    usuarioEntradaDTO: UsuarioEntradaDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  obtenerUsuario<TData = UsuarioSalidaDTO>(
+    id: number,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  obtenerUsuario<TData = UsuarioSalidaDTO>(
+    id: number,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  obtenerUsuario<TData = UsuarioSalidaDTO>(
+    id: number,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.put<TData>(
-      `/api/usuarios/${id}`,
-      usuarioEntradaDTO,{
+      return this.http.get<TData>(`/api/usuarios/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.put<TData>(
-      `/api/usuarios/${id}`,
-      usuarioEntradaDTO,{
+      return this.http.get<TData>(`/api/usuarios/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.put<TData>(
-      `/api/usuarios/${id}`,
-      usuarioEntradaDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.get<TData>(`/api/usuarios/${id}`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Eliminar (baja lógica) un usuario
- */
- eliminar<TData = void>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
- eliminar<TData = void>(id: number, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- eliminar<TData = void>(id: number, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  eliminar<TData = void>(
-    id: number, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Actualizar un usuario
+   */
+  actualizarUsuario<TData = UsuarioSalidaDTO>(
+    id: number,
+    usuarioEntradaDTO: UsuarioEntradaDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  actualizarUsuario<TData = UsuarioSalidaDTO>(
+    id: number,
+    usuarioEntradaDTO: UsuarioEntradaDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  actualizarUsuario<TData = UsuarioSalidaDTO>(
+    id: number,
+    usuarioEntradaDTO: UsuarioEntradaDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  actualizarUsuario<TData = UsuarioSalidaDTO>(
+    id: number,
+    usuarioEntradaDTO: UsuarioEntradaDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.delete<TData>(
-      `/api/usuarios/${id}`,{
+      return this.http.put<TData>(`/api/usuarios/${id}`, usuarioEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.delete<TData>(
-      `/api/usuarios/${id}`,{
+      return this.http.put<TData>(`/api/usuarios/${id}`, usuarioEntradaDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.delete<TData>(
-      `/api/usuarios/${id}`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.put<TData>(`/api/usuarios/${id}`, usuarioEntradaDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Editar el perfil propio (nombre) del usuario autenticado
- */
- actualizarPerfil<TData = UsuarioSalidaDTO>(perfilUsuarioDTO: PerfilUsuarioDTO, options?: HttpClientBodyOptions): Observable<TData>;
- actualizarPerfil<TData = UsuarioSalidaDTO>(perfilUsuarioDTO: PerfilUsuarioDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- actualizarPerfil<TData = UsuarioSalidaDTO>(perfilUsuarioDTO: PerfilUsuarioDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  actualizarPerfil<TData = UsuarioSalidaDTO>(
-    perfilUsuarioDTO: PerfilUsuarioDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Eliminar (baja lógica) un usuario
+   */
+  eliminarUsuario<TData = void>(id: number, options?: HttpClientBodyOptions): Observable<TData>;
+  eliminarUsuario<TData = void>(
+    id: number,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  eliminarUsuario<TData = void>(
+    id: number,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  eliminarUsuario<TData = void>(
+    id: number,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.put<TData>(
-      `/api/usuarios/me`,
-      perfilUsuarioDTO,{
+      return this.http.delete<TData>(`/api/usuarios/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.put<TData>(
-      `/api/usuarios/me`,
-      perfilUsuarioDTO,{
+      return this.http.delete<TData>(`/api/usuarios/${id}`, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.put<TData>(
-      `/api/usuarios/me`,
-      perfilUsuarioDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.delete<TData>(`/api/usuarios/${id}`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Listar todos los usuarios
- */
- listar4<TData = UsuarioSalidaDTO[]>( options?: HttpClientBodyOptions): Observable<TData>;
- listar4<TData = UsuarioSalidaDTO[]>( options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- listar4<TData = UsuarioSalidaDTO[]>( options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
-  listar4<TData = UsuarioSalidaDTO[]>(
-     options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+  /**
+   * @summary Editar el perfil propio (nombre) del usuario autenticado
+   */
+  actualizarMiPerfil<TData = UsuarioSalidaDTO>(
+    perfilUsuarioDTO: PerfilUsuarioDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  actualizarMiPerfil<TData = UsuarioSalidaDTO>(
+    perfilUsuarioDTO: PerfilUsuarioDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  actualizarMiPerfil<TData = UsuarioSalidaDTO>(
+    perfilUsuarioDTO: PerfilUsuarioDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  actualizarMiPerfil<TData = UsuarioSalidaDTO>(
+    perfilUsuarioDTO: PerfilUsuarioDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.get<TData>(
-      `/api/usuarios`,{
+      return this.http.put<TData>(`/api/usuarios/me`, perfilUsuarioDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.get<TData>(
-      `/api/usuarios`,{
+      return this.http.put<TData>(`/api/usuarios/me`, perfilUsuarioDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.get<TData>(
-      `/api/usuarios`,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.put<TData>(`/api/usuarios/me`, perfilUsuarioDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-};
+  /**
+   * @summary Listar todos los usuarios
+   */
+  listarUsuarios<TData = UsuarioSalidaDTO[]>(options?: HttpClientBodyOptions): Observable<TData>;
+  listarUsuarios<TData = UsuarioSalidaDTO[]>(
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  listarUsuarios<TData = UsuarioSalidaDTO[]>(
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  listarUsuarios<TData = UsuarioSalidaDTO[]>(
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    if (options?.observe === 'events') {
+      return this.http.get<TData>(`/api/usuarios`, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'events',
+      });
+    }
 
-export type ObtenerClientResult = NonNullable<UsuarioSalidaDTO>
-export type ActualizarClientResult = NonNullable<UsuarioSalidaDTO>
-export type EliminarClientResult = NonNullable<void>
-export type ActualizarPerfilClientResult = NonNullable<UsuarioSalidaDTO>
-export type Listar4ClientResult = NonNullable<UsuarioSalidaDTO[]>
+    if (options?.observe === 'response') {
+      return this.http.get<TData>(`/api/usuarios`, {
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'response',
+      });
+    }
+
+    return this.http.get<TData>(`/api/usuarios`, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
+  }
+}
+
+export type ObtenerUsuarioClientResult = NonNullable<UsuarioSalidaDTO>;
+export type ActualizarUsuarioClientResult = NonNullable<UsuarioSalidaDTO>;
+export type EliminarUsuarioClientResult = NonNullable<void>;
+export type ActualizarMiPerfilClientResult = NonNullable<UsuarioSalidaDTO>;
+export type ListarUsuariosClientResult = NonNullable<UsuarioSalidaDTO[]>;

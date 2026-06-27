@@ -4,40 +4,21 @@
  * Sistema de Turnos API
  * OpenAPI spec version: v1
  */
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpResponse as AngularHttpResponse
-} from '@angular/common/http';
-import type {
-  HttpContext,
-  HttpEvent,
-  HttpParams
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse as AngularHttpResponse } from '@angular/common/http';
+import type { HttpContext, HttpEvent, HttpParams } from '@angular/common/http';
 
-import {
-  Injectable,
-  inject
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
-import type {
-  AuthRespuestaDTO,
-  LoginDTO,
-  RegistroDTO
-} from '../model';
-
-
+import type { AuthRespuestaDTO, LoginDTO, RegistroDTO } from '../model';
 
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
   readonly params?:
-        | HttpParams
-      | Record<string, string | number | boolean | Array<string | number | boolean>>;
+    | HttpParams
+    | Record<string, string | number | boolean | Array<string | number | boolean>>;
   readonly reportProgress?: boolean;
   readonly withCredentials?: boolean;
   readonly credentials?: RequestCredentials;
@@ -49,7 +30,7 @@ interface HttpClientOptions {
   readonly referrer?: string;
   readonly integrity?: string;
   readonly referrerPolicy?: ReferrerPolicy;
-  readonly transferCache?: {includeHeaders?: string[]} | boolean;
+  readonly transferCache?: { includeHeaders?: string[] } | boolean;
   readonly timeout?: number;
 }
 
@@ -69,86 +50,83 @@ type HttpClientObserveOptions = HttpClientOptions & {
   readonly observe?: 'body' | 'events' | 'response';
 };
 
-
-
-
-
-
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-/**
- * @summary Registrar un cliente y devolver su token
- */
- register<TData = AuthRespuestaDTO>(registroDTO: RegistroDTO, options?: HttpClientBodyOptions): Observable<TData>;
- register<TData = AuthRespuestaDTO>(registroDTO: RegistroDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- register<TData = AuthRespuestaDTO>(registroDTO: RegistroDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
+  /**
+   * @summary Registrar un cliente y devolver su token
+   */
   register<TData = AuthRespuestaDTO>(
-    registroDTO: RegistroDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    registroDTO: RegistroDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  register<TData = AuthRespuestaDTO>(
+    registroDTO: RegistroDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  register<TData = AuthRespuestaDTO>(
+    registroDTO: RegistroDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  register<TData = AuthRespuestaDTO>(
+    registroDTO: RegistroDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.post<TData>(
-      `/api/auth/register`,
-      registroDTO,{
+      return this.http.post<TData>(`/api/auth/register`, registroDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.post<TData>(
-      `/api/auth/register`,
-      registroDTO,{
+      return this.http.post<TData>(`/api/auth/register`, registroDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.post<TData>(
-      `/api/auth/register`,
-      registroDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.post<TData>(`/api/auth/register`, registroDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-/**
- * @summary Iniciar sesión y obtener un token
- */
- login<TData = AuthRespuestaDTO>(loginDTO: LoginDTO, options?: HttpClientBodyOptions): Observable<TData>;
- login<TData = AuthRespuestaDTO>(loginDTO: LoginDTO, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
- login<TData = AuthRespuestaDTO>(loginDTO: LoginDTO, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
+  /**
+   * @summary Iniciar sesión y obtener un token
+   */
   login<TData = AuthRespuestaDTO>(
-    loginDTO: LoginDTO, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    loginDTO: LoginDTO,
+    options?: HttpClientBodyOptions,
+  ): Observable<TData>;
+  login<TData = AuthRespuestaDTO>(
+    loginDTO: LoginDTO,
+    options?: HttpClientEventOptions,
+  ): Observable<HttpEvent<TData>>;
+  login<TData = AuthRespuestaDTO>(
+    loginDTO: LoginDTO,
+    options?: HttpClientResponseOptions,
+  ): Observable<AngularHttpResponse<TData>>;
+  login<TData = AuthRespuestaDTO>(
+    loginDTO: LoginDTO,
+    options?: HttpClientObserveOptions,
+  ): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
-      return this.http.post<TData>(
-      `/api/auth/login`,
-      loginDTO,{
+      return this.http.post<TData>(`/api/auth/login`, loginDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
-      }
-    );
+      });
     }
 
     if (options?.observe === 'response') {
-      return this.http.post<TData>(
-      `/api/auth/login`,
-      loginDTO,{
+      return this.http.post<TData>(`/api/auth/login`, loginDTO, {
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
-      }
-    );
+      });
     }
 
-    return this.http.post<TData>(
-      `/api/auth/login`,
-      loginDTO,{
-        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
-        observe: 'body',
-      }
-    );
+    return this.http.post<TData>(`/api/auth/login`, loginDTO, {
+      ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+      observe: 'body',
+    });
   }
-};
-
+}
