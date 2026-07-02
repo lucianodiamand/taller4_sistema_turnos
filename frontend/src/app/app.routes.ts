@@ -65,7 +65,13 @@ export const routes: Routes = [
           },
           { path: 'mis-turnos', loadComponent: placeholder },
           { path: 'crear-disponibilidad', loadComponent: placeholder },
-          { path: 'mi-perfil', loadComponent: placeholder },
+          {
+            path: 'mi-perfil',
+            loadComponent: () =>
+              import('./features/profesional/mi-perfil/profesional-perfil').then(
+                (m) => m.ProfesionalPerfil,
+              ),
+          },
         ],
       },
       {
@@ -79,7 +85,7 @@ export const routes: Routes = [
           },
           { path: 'disponibilidades', loadComponent: placeholder },
           { path: 'mis-turnos', loadComponent: placeholder },
-          { path: 'mi-perfil', loadComponent: placeholder },
+          {path: 'mi-perfil',loadComponent: () => import('./features/cliente/mi-perfil/cliente-perfil').then((m) => m.ClientePerfil,),},
         ],
       },
     ],

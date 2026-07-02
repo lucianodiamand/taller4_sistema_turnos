@@ -55,6 +55,11 @@ export class SesionService {
     this.router.navigate(['/login']);
   }
 
+  guardarUsuario(usuario: UsuarioSalidaDTO): void {
+    localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuario));
+    this._usuario.set(usuario);
+  }
+
   private guardar(resp: AuthRespuestaDTO): void {
     const token = resp.token ?? null;
     const usuario = resp.usuario ?? null;
