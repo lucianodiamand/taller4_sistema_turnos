@@ -17,6 +17,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
   },
   {
+    path: 'registro',
+    canActivate: [guestGuard],
+    loadComponent: () => import('./features/auth/registro/registro').then((m) => m.Registro),
+  },
+  {
     path: 'inicio',
     canActivate: [authGuard],
     loadComponent: () => import('./core/layout/main-layout/main-layout').then((m) => m.MainLayout),
@@ -63,8 +68,18 @@ export const routes: Routes = [
                 (m) => m.ProfesionalHome,
               ),
           },
-          { path: 'mis-turnos', loadComponent: placeholder },
-          { path: 'crear-disponibilidad', loadComponent: placeholder },
+          {
+            path: 'mis-turnos',
+            loadComponent: () =>
+              import('./features/turnos/mis-turnos/mis-turnos').then((m) => m.MisTurnos),
+          },
+          {
+            path: 'crear-disponibilidad',
+            loadComponent: () =>
+              import('./features/profesional/disponibilidades/disponibilidades').then(
+                (m) => m.ProfesionalDisponibilidades,
+              ),
+          },
           {
             path: 'mi-perfil',
             loadComponent: () =>
@@ -83,8 +98,18 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/cliente/cliente-home/cliente-home').then((m) => m.ClienteHome),
           },
-          { path: 'disponibilidades', loadComponent: placeholder },
-          { path: 'mis-turnos', loadComponent: placeholder },
+          {
+            path: 'disponibilidades',
+            loadComponent: () =>
+              import('./features/cliente/disponibilidades/disponibilidades').then(
+                (m) => m.ClienteDisponibilidades,
+              ),
+          },
+          {
+            path: 'mis-turnos',
+            loadComponent: () =>
+              import('./features/turnos/mis-turnos/mis-turnos').then((m) => m.MisTurnos),
+          },
           {
             path: 'mi-perfil',
             loadComponent: () =>
