@@ -10,9 +10,9 @@ import { finalize } from 'rxjs';
 import { SesionService } from '../../../core/auth/sesion.service';
 import { NotificacionService } from '../../../shared/ui/notificacion.service';
 
-/** Pantalla de login: form reactivo que delega en SesionService y redirige a /inicio. */
+/** Alta de cliente: form reactivo que delega en SesionService.register y redirige a /inicio. */
 @Component({
-  selector: 'app-login',
+  selector: 'app-registro',
   imports: [
     ReactiveFormsModule,
     RouterLink,
@@ -21,10 +21,10 @@ import { NotificacionService } from '../../../shared/ui/notificacion.service';
     MatInputModule,
     MatButtonModule,
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+  templateUrl: './registro.html',
+  styleUrl: './registro.scss',
 })
-export class Login {
+export class Registro {
   private readonly fb = inject(FormBuilder);
   private readonly sesion = inject(SesionService);
   private readonly router = inject(Router);
@@ -33,22 +33,23 @@ export class Login {
   protected readonly cargando = signal(false);
 
   protected readonly form = this.fb.nonNullable.group({
-    email: ['', Validators.required],
-    password: ['', Validators.required],
+    nombre: ['', [Validators.required, Validators.maxLength(100)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  protected ingresar(): void {
+  protected registrar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     this.cargando.set(true);
     this.sesion
-      .login(this.form.getRawValue())
+      .register(this.form.getRawValue())
       .pipe(finalize(() => this.cargando.set(false)))
       .subscribe({
         next: () => this.router.navigate(['/inicio']),
-        error: (e) => this.noti.error(e, 'No se pudo iniciar sesión'),
+        error: (e) => this.noti.error(e, 'No se pudo crear la cuenta'),
       });
   }
 }

@@ -6,24 +6,24 @@ import { of, throwError } from 'rxjs';
 
 import { SesionService } from '../../../core/auth/sesion.service';
 import { NotificacionService } from '../../../shared/ui/notificacion.service';
-import { Login } from './login';
+import { Registro } from './registro';
 
-describe('Login', () => {
-  let sesion: { login: ReturnType<typeof vi.fn> };
+describe('Registro', () => {
+  let sesion: { register: ReturnType<typeof vi.fn> };
   let noti: { error: ReturnType<typeof vi.fn>; exito: ReturnType<typeof vi.fn> };
   let navigate: ReturnType<typeof vi.fn>;
 
-  function crear(): Login {
-    const cmp = TestBed.createComponent(Login).componentInstance;
+  function crear(): Registro {
+    const cmp = TestBed.createComponent(Registro).componentInstance;
     navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true) as never;
     return cmp;
   }
 
   beforeEach(async () => {
-    sesion = { login: vi.fn() };
+    sesion = { register: vi.fn() };
     noti = { error: vi.fn(), exito: vi.fn() };
     await TestBed.configureTestingModule({
-      imports: [Login],
+      imports: [Registro],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -34,26 +34,37 @@ describe('Login', () => {
     }).compileComponents();
   });
 
-  it('no llama a login si el formulario está vacío', () => {
+  it('no registra si el formulario es inválido', () => {
     const cmp = crear() as any;
-    cmp.ingresar();
-    expect(sesion.login).not.toHaveBeenCalled();
+    cmp.registrar();
+    expect(sesion.register).not.toHaveBeenCalled();
   });
 
-  it('loguea y navega a /inicio cuando es exitoso', () => {
-    sesion.login.mockReturnValue(of({ token: 't', usuario: {} }));
+  it('no registra si la contraseña es demasiado corta', () => {
     const cmp = crear() as any;
-    cmp.form.setValue({ email: 'admin', password: 'admin' });
-    cmp.ingresar();
-    expect(sesion.login).toHaveBeenCalledWith({ email: 'admin', password: 'admin' });
+    cmp.form.setValue({ nombre: 'Ana', email: 'ana@mail.com', password: '123' });
+    cmp.registrar();
+    expect(sesion.register).not.toHaveBeenCalled();
+  });
+
+  it('registra y navega a /inicio cuando es exitoso', () => {
+    sesion.register.mockReturnValue(of({ token: 't', usuario: {} }));
+    const cmp = crear() as any;
+    cmp.form.setValue({ nombre: 'Ana', email: 'ana@mail.com', password: 'secreto' });
+    cmp.registrar();
+    expect(sesion.register).toHaveBeenCalledWith({
+      nombre: 'Ana',
+      email: 'ana@mail.com',
+      password: 'secreto',
+    });
     expect(navigate).toHaveBeenCalledWith(['/inicio']);
   });
 
-  it('muestra error y no navega si el login falla', () => {
-    sesion.login.mockReturnValue(throwError(() => ({ status: 401 })));
+  it('muestra error y no navega si el registro falla', () => {
+    sesion.register.mockReturnValue(throwError(() => ({ status: 409 })));
     const cmp = crear() as any;
-    cmp.form.setValue({ email: 'admin', password: 'mala' });
-    cmp.ingresar();
+    cmp.form.setValue({ nombre: 'Ana', email: 'ana@mail.com', password: 'secreto' });
+    cmp.registrar();
     expect(noti.error).toHaveBeenCalled();
     expect(navigate).not.toHaveBeenCalled();
   });
