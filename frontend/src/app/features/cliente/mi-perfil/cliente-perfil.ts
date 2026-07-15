@@ -4,95 +4,103 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { finalize } from 'rxjs';
 
 import { UsuarioService } from '../../../core/api/generated/usuario/usuario.service';
 import { SesionService } from '../../../core/auth/sesion.service';
-import type { PerfilUsuarioDTO, UsuarioSalidaDTO } from '../../../core/api/generated/model';
+import { NotificacionService } from '../../../shared/ui/notificacion.service';
 
-/** Perfil del cliente: edita nombre. */
+/** Autoedición del perfil del cliente: solo el nombre (PUT /api/usuarios/me). */
 @Component({
   selector: 'app-cliente-perfil',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatProgressSpinnerModule,
   ],
   template: `
-    <div class="perfil-page">
-      <h1 class="perfil-page__title">Mi perfil</h1>
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Datos personales</mat-card-title>
-        </mat-card-header>
+    <div class="perfil">
+      <h1>Mi perfil</h1>
+      <mat-card appearance="outlined">
+        <mat-card-header><mat-card-title>Datos personales</mat-card-title></mat-card-header>
         <mat-card-content>
           <form [formGroup]="form" (ngSubmit)="guardar()">
             <mat-form-field>
               <mat-label>Nombre</mat-label>
-              <input matInput formControlName="nombre" placeholder="Tu nombre completo" />
-              @if (form.get('nombre')?.hasError('required')) {
-                <mat-error>El nombre es requerido</mat-error>
+              <input matInput formControlName="nombre" />
+              @if (form.controls.nombre.hasError('required')) {
+                <mat-error>El nombre es obligatorio</mat-error>
               }
-              @if (form.get('nombre')?.hasError('maxlength')) {
-                <mat-error>El nombre no puede tener más de 100 caracteres</mat-error>
+              @if (form.controls.nombre.hasError('maxlength')) {
+                <mat-error>Máximo 100 caracteres</mat-error>
               }
             </mat-form-field>
             <div class="acciones">
-              <button mat-raised-button color="primary" [disabled]="!form.valid || guardando()">
-                @if (guardando()) {
-                  <mat-spinner diameter="20"></mat-spinner>
-                }
-                Guardar
-              </button>
+              <button mat-raised-button color="primary" [disabled]="guardando()">Guardar</button>
             </div>
           </form>
         </mat-card-content>
       </mat-card>
     </div>
   `,
+  styles: `
+    .perfil {
+      max-width: 520px;
+    }
+    mat-card {
+      margin-top: 1rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    mat-form-field {
+      width: 100%;
+    }
+    .acciones {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0.5rem;
+    }
+  `,
 })
 export class ClientePerfil {
   private readonly usuarioApi = inject(UsuarioService);
   private readonly sesion = inject(SesionService);
   private readonly fb = inject(FormBuilder);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly noti = inject(NotificacionService);
 
-  form = this.fb.group({
+  protected readonly guardando = signal(false);
+
+  protected readonly form = this.fb.nonNullable.group({
     nombre: ['', [Validators.required, Validators.maxLength(100)]],
   });
 
-  guardando = signal(false);
-
   constructor() {
-    // Cargar datos del usuario en sesión
-    const usuario = this.sesion.usuario();
-    if (usuario?.nombre) {
-      this.form.patchValue({ nombre: usuario.nombre });
+    const nombre = this.sesion.usuario()?.nombre;
+    if (nombre) {
+      this.form.setValue({ nombre });
     }
   }
 
-  guardar(): void {
-    if (!this.form.valid) return;
-
+  protected guardar(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.guardando.set(true);
-
-    const perfil: PerfilUsuarioDTO = this.form.getRawValue();
-    this.usuarioApi.actualizarMiPerfil(perfil).subscribe({
-      next: (usuario: UsuarioSalidaDTO) => {
-        this.guardando.set(false);
-        this.sesion.guardarUsuario(usuario);
-        this.snackBar.open('Perfil actualizado correctamente', 'Cerrar', { duration: 3000 });
-      },
-      error: (error: unknown) => {
-        this.guardando.set(false);
-        console.error('Error al actualizar perfil:', error);
-        this.snackBar.open('Error al actualizar el perfil', 'Cerrar', { duration: 3000 });
-      },
-    });
+    this.usuarioApi
+      .actualizarMiPerfil(this.form.getRawValue())
+      .pipe(finalize(() => this.guardando.set(false)))
+      .subscribe({
+        next: (usuario) => {
+          this.sesion.guardarUsuario(usuario);
+          this.noti.exito('Perfil actualizado');
+        },
+        error: (e) => this.noti.error(e, 'No se pudo actualizar el perfil'),
+      });
   }
 }

@@ -85,7 +85,11 @@ export const routes: Routes = [
           },
           { path: 'disponibilidades', loadComponent: placeholder },
           { path: 'mis-turnos', loadComponent: placeholder },
-          {path: 'mi-perfil',loadComponent: () => import('./features/cliente/mi-perfil/cliente-perfil').then((m) => m.ClientePerfil,),},
+          {
+            path: 'mi-perfil',
+            loadComponent: () =>
+              import('./features/cliente/mi-perfil/cliente-perfil').then((m) => m.ClientePerfil),
+          },
         ],
       },
     ],
