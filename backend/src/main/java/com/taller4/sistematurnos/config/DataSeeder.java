@@ -13,8 +13,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * Carga datos de prueba al iniciar: un usuario por cada rol con credenciales fáciles de recordar
- * (email = password = nombre del rol en minúscula: admin/admin, profesional/profesional,
- * cliente/cliente). Es idempotente: solo crea lo que falta, así que se puede correr siempre.
+ * (email = {@code <rol>@email.com}, password = {@code <rol>}: admin@email.com/admin,
+ * profesional@email.com/profesional, cliente@email.com/cliente). Es idempotente: solo crea lo que
+ * falta, así que se puede correr siempre.
  */
 @Component
 public class DataSeeder implements CommandLineRunner {
@@ -41,8 +42,14 @@ public class DataSeeder implements CommandLineRunner {
     seedProfesional("profesional", "Profesional Demo");
   }
 
-  /** Crea un usuario con password = email si todavía no existe. */
-  private void seedUsuario(String email, String nombre, Rol rol) {
+  /** Arma el email de demo a partir del slug del rol (ej. "cliente" -> "cliente@email.com"). */
+  private static String emailDe(String slug) {
+    return slug + "@email.com";
+  }
+
+  /** Crea un usuario con password = slug del rol si todavía no existe. */
+  private void seedUsuario(String slug, String nombre, Rol rol) {
+    String email = emailDe(slug);
     if (usuarioRepository.existsByEmail(email)) {
       return;
     }
@@ -50,14 +57,17 @@ public class DataSeeder implements CommandLineRunner {
     usuario.setNombre(nombre);
     usuario.setEmail(email);
     usuario.setRol(rol);
-    usuario.setPasswordHash(passwordEncoder.encode(email));
+    usuario.setPasswordHash(passwordEncoder.encode(slug));
     usuario.setActivo(true);
     usuarioRepository.save(usuario);
-    log.info("Seed: usuario de prueba '{}' (password '{}', rol {})", email, email, rol);
+    log.info("Seed: usuario de prueba '{}' (password '{}', rol {})", email, slug, rol);
   }
 
-  /** Crea un profesional (con su cuenta Usuario) con password = email si todavía no existe. */
-  private void seedProfesional(String email, String nombre) {
+  /**
+   * Crea un profesional (con su cuenta Usuario) con password = slug del rol si todavía no existe.
+   */
+  private void seedProfesional(String slug, String nombre) {
+    String email = emailDe(slug);
     if (usuarioRepository.existsByEmail(email)) {
       return;
     }
@@ -65,7 +75,7 @@ public class DataSeeder implements CommandLineRunner {
     usuario.setNombre(nombre);
     usuario.setEmail(email);
     usuario.setRol(Rol.PROFESIONAL);
-    usuario.setPasswordHash(passwordEncoder.encode(email));
+    usuario.setPasswordHash(passwordEncoder.encode(slug));
     usuario.setActivo(true);
 
     Profesional profesional = new Profesional();
@@ -75,6 +85,6 @@ public class DataSeeder implements CommandLineRunner {
     profesional.setTelefono("000-0000");
 
     profesionalRepository.save(profesional);
-    log.info("Seed: profesional de prueba '{}' (password '{}')", email, email);
+    log.info("Seed: profesional de prueba '{}' (password '{}')", email, slug);
   }
 }
